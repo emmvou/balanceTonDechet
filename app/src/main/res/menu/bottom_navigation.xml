@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_itineraire"
+        android:icon="@drawable/ic_baseline_moving_24"
+        android:title="Itinéraire">
+    </item>
+
+    <item
+        android:id="@+id/nav_carte"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Carte">
+    </item>
+
+    <item
+        android:id="@+id/nav_signaler"
+        android:icon="@drawable/ic_baseline_add_location_alt_24"
+        android:title="Signaler">
+    </item>
+
+</menu>
