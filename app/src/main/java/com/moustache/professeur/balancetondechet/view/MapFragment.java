@@ -34,12 +34,12 @@ public class MapFragment extends Fragment {
 
         map = view.findViewById(R.id.map);
 
-        initializeMapIfNeeded();
+        initializeMap();
 
         return view;
     }
 
-    private void initializeMapIfNeeded() {
+    private void initializeMap() {
         map.setTileSource(TileSourceFactory.MAPNIK);
         // TODO: use non-deprecated code instead
         map.setBuiltInZoomControls(true);
