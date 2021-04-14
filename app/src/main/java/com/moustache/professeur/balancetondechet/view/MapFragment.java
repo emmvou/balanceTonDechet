@@ -29,9 +29,12 @@ import org.osmdroid.views.overlay.OverlayItem;
 import java.io.Console;
 import java.util.ArrayList;
 
+
+
 public class MapFragment extends Fragment {
     private MapView map;
     private IMapController mapController;
+    LocationTrack locationTrack;
 
     @Nullable
     @Override
@@ -42,6 +45,11 @@ public class MapFragment extends Fragment {
                 view.getContext(),
                 PreferenceManager.getDefaultSharedPreferences(view.getContext())
         );
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            locationTrack = bundle.getParcelable("location");
+        }
 
         map = view.findViewById(R.id.map);
 
@@ -57,7 +65,7 @@ public class MapFragment extends Fragment {
         // TODO: use non-deprecated code instead
         map.setBuiltInZoomControls(true);
         // TODO: use GPS-provided coordinates instead
-        GeoPoint startPoint = new GeoPoint(43.6178307, 7.0764037);
+        GeoPoint startPoint = new GeoPoint(locationTrack.latitude, locationTrack.getLongitude());
         mapController = map.getController();
         mapController.setCenter(startPoint);
         mapController.setZoom(18.0);
@@ -115,5 +123,13 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         map.onResume();
+    }
+
+    public static MapFragment newInstance (LocationTrack loc) {
+        MapFragment fragment = new MapFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("location", loc);
+        fragment.setArguments(arguments);
+        return fragment;
     }
 }
