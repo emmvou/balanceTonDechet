@@ -12,7 +12,7 @@
         <item
             android:id="@+id/drawer_logout"
             android:icon="@drawable/ic_menu_offline"
-            android:title="Profil" />
+            android:title="Se déconnecter" />
     </group>
 
 </menu>

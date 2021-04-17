@@ -94,6 +94,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.drawer_profil:
                 Log.v("Drawer","PROFIL");
+                Intent intentProfile = new Intent(this, ProfileActivity.class);
+                intentProfile.putExtra("user",currentUser);
+                startActivity(intentProfile);
                 break;
             default:
                 break;
