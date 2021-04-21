@@ -3,6 +3,7 @@ package com.moustache.professeur.balancetondechet.view;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -102,7 +103,7 @@ public class MapFragment extends Fragment {
     private boolean hasPermission(String permission) {
         if (canMakeSmores()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return (PackageManager.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+                return (this.getContext().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
             }
         }
         return true;
