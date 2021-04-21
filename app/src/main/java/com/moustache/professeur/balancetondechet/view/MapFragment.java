@@ -194,6 +194,13 @@ public class MapFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        String name = trashes.get(index).getName();
+
+                        Fragment nextFrag = new TrashDataFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", name);
+                        nextFrag.setArguments(bundle);
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, nextFrag).commit();
                         return false;
                     }
 
