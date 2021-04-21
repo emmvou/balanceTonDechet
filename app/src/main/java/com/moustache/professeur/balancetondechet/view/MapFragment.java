@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
@@ -37,6 +38,8 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MapFragment extends Fragment {
     private MapView map;
@@ -48,6 +51,8 @@ public class MapFragment extends Fragment {
 
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
+
+    private List<Trash> trashes;
 
     @Nullable
     @Override
@@ -172,7 +177,13 @@ public class MapFragment extends Fragment {
     }
 
     private void addPinPoints() {
-        ArrayList<OverlayItem> pins = parsePins();
+        trashes = parsePins();
+        ArrayList<OverlayItem> pins = trashes
+                .stream()
+                .map(Trash::getTrashPin)
+                .map(TrashPin::toOverlayItem)
+                .collect(Collectors.toCollection(ArrayList::new));
+
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
                 getContext(),
                 pins,
@@ -192,25 +203,8 @@ public class MapFragment extends Fragment {
         map.getOverlays().add(mOverlay);
     }
 
-    private ArrayList<OverlayItem> parsePins() {
-        String parsedPins = JsonParser.getJsonFromAssets(getContext(), "pins.json");
-
-        try {
-            JSONArray pins = new JSONArray(parsedPins);
-            ArrayList<OverlayItem> pinArray = new ArrayList<>(pins.length());
-
-            for (int i = 0; i < pins.length(); i++) {
-                JSONObject pinElement = pins.getJSONObject(i);
-                TrashPin pin = new TrashPin(pinElement);
-
-                pinArray.add(pin.toOverlayItem());
-            }
-
-            return pinArray;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to parse json");
-        }
+    private List<Trash> parsePins() {
+        return Trash.parseMultipleFromJson(getContext());
     }
 
     @Override

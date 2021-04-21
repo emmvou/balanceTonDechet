@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Microwave",
+    "desc": "An old microwave, which still works",
+    "isPickedUp": false,
+    "isApproved": true,
+    "x": 43.6178307,
+    "y": 7.0764037
+  },
+  {
+    "name": "Microwave",
+    "desc": "An old microwave, which still works",
+    "isPickedUp": false,
+    "isApproved": true,
+    "x": 43.616946,
+    "y": 7.074177
+  }
+]
