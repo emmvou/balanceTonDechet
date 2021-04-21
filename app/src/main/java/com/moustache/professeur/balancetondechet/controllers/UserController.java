@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 import com.moustache.professeur.balancetondechet.view.MainMenuActivity;
@@ -41,6 +42,10 @@ public class UserController {
             return currentUser;
         }
         else return null;
+    }
+
+    public void pickUpTrash(User u, Trash t){
+        u.addTrash(t);
     }
 
 }

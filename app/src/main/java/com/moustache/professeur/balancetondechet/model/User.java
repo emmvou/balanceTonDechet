@@ -4,10 +4,13 @@ package com.moustache.professeur.balancetondechet.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class User implements Parcelable {
     private String email;
     private String nom;
     private String prenom;
+    private ArrayList<Trash> pickedUpTrashs = new ArrayList<Trash>();
 
     public User(String email, String nom, String prenom){
         this.email = email;
@@ -55,5 +58,13 @@ public class User implements Parcelable {
         dest.writeString(email);
         dest.writeString(nom);
         dest.writeString(prenom);
+    }
+
+    public void addTrash(Trash t){
+        pickedUpTrashs.add(t);
+    }
+
+    public ArrayList<Trash> getPickedUpTrashs() {
+        return pickedUpTrashs;
     }
 }
