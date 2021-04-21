@@ -165,7 +165,7 @@ public class MapFragment extends Fragment {
         // TODO: use non-deprecated code instead
         map.setBuiltInZoomControls(true);
         // TODO: use GPS-provided coordinates instead
-        GeoPoint startPoint = new GeoPoint(locationTrack.latitude, locationTrack.getLongitude());
+        GeoPoint startPoint = new GeoPoint(locationTrack.getLatitude(), locationTrack.getLongitude());
         mapController = map.getController();
         mapController.setCenter(startPoint);
         mapController.setZoom(18.0);
