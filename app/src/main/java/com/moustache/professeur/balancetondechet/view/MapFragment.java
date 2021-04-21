@@ -53,6 +53,7 @@ public class MapFragment extends Fragment {
 
         map = view.findViewById(R.id.map);
 
+
         initializeMap();
 
         addPinPoints();
@@ -125,11 +126,11 @@ public class MapFragment extends Fragment {
         map.onResume();
     }
 
-    public static MapFragment newInstance (LocationTrack loc) {
-        MapFragment fragment = new MapFragment();
-        Bundle arguments = new Bundle();
-        arguments.putParcelable("location", loc);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
+    //public static MapFragment newInstance (LocationTrack loc) {
+    //    MapFragment fragment = new MapFragment();
+    //    Bundle arguments = new Bundle();
+    //    arguments.putParcelable("location", loc);
+    //    fragment.setArguments(arguments);
+    //    return fragment;
+    //}
 }

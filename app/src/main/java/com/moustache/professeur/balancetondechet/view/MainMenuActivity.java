@@ -66,8 +66,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         if (locationTrack.canGetLocation()) {
 
-            MapFragment fragment = MapFragment.newInstance(locationTrack);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            //MapFragment fragment = MapFragment.newInstance(locationTrack);
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             //double longitude = locationTrack.getLongitude();
             //double latitude = locationTrack.getLatitude();
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();

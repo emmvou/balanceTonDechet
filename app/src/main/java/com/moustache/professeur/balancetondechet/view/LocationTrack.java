@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
-public class LocationTrack extends Service implements LocationListener, Parcelable {
+public class LocationTrack extends Service implements LocationListener {
 
     private final Context mContext;
 
@@ -223,15 +223,5 @@ public class LocationTrack extends Service implements LocationListener, Parcelab
 
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.write
-
-    }
 }
 
