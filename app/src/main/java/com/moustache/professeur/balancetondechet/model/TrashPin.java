@@ -1,8 +1,11 @@
 package com.moustache.professeur.balancetondechet.model;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.Distance;
 import org.osmdroid.views.overlay.OverlayItem;
 
 public class TrashPin {
@@ -11,11 +14,24 @@ public class TrashPin {
 
     public TrashPin(double x, double y) {
         this.x = x;
-        this.y = y;
+        this.y= y;
     }
 
-    public double getDistance(double x, double y){
-        return Math.sqrt(Math.pow(this.x - x,2)+Math.pow(this.y - y,2));
+    //formula : https://www.movable-type.co.uk/scripts/latlong.html
+    public double getDistance(double dx, double dy){
+        double lat1 = x;
+        double long1 = y;
+        //return Math.sqrt(Distance.getSquaredDistanceToPoint(this.x, this.y, x, y));
+        double R = 6371000;
+        double phi1 = lat1*Math.PI/180;
+        double phi2 = dx*Math.PI/180;
+        double deltaphi = (dx-lat1)*Math.PI/180;
+        double deltalambda = (dy - long1)*Math.PI/180;
+        double a = Math.sin(deltaphi/2)*Math.sin(deltaphi/2)+Math.cos(phi1)*Math.cos(phi2)*Math.sin(deltalambda/2)*Math.sin(deltalambda/2);
+        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = R*c; //m
+        Log.v("DISTANCE", "distance between points : "+String.valueOf(d)+"m");
+        return d/1000; //km
     }
 
     public TrashPin(JSONObject obj) throws JSONException {

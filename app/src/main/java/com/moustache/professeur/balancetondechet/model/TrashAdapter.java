@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.utils.Pair;
 
 import java.util.Locale;
 
@@ -17,10 +18,12 @@ public class TrashAdapter extends BaseAdapter {
 
     private ListTrash trashes;
     private LayoutInflater inflater;
+    private Pair<Double, Double> location;
 
-    public TrashAdapter(Context ctx, ListTrash listTrash) {
+    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y) {
         this.trashes = listTrash;
         this.inflater = LayoutInflater.from(ctx);
+        location = Pair.of(x, y);
     }
 
     @Override
@@ -43,8 +46,8 @@ public class TrashAdapter extends BaseAdapter {
         LinearLayout layoutItem;
         layoutItem = (LinearLayout) (convertView==null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
         ((TextView)layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
-        ((TextView)layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE,"%f km",
-                trashes.get(position).getTrashPin().getDistance((double)0,(double)0)));
+        ((TextView)layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE,"%1.1f km",
+                trashes.get(position).getTrashPin().getDistance(location.getFirst(),location.getSecond())));
         return layoutItem;
     }
 }

@@ -222,3 +222,5 @@ public class LocationTrack extends Service implements LocationListener {
     }
 }
 
+//*******SOURCES
+//*****https://www.journaldev.com/13325/android-location-api-tracking-gps
