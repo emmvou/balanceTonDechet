@@ -3,12 +3,15 @@ package com.moustache.professeur.balancetondechet.model;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moustache.professeur.balancetondechet.R;
+
+import java.util.Locale;
 
 public class TrashAdapter extends BaseAdapter {
 
@@ -40,6 +43,8 @@ public class TrashAdapter extends BaseAdapter {
         LinearLayout layoutItem;
         layoutItem = (LinearLayout) (convertView==null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
         ((TextView)layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
+        ((TextView)layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE,"%f km",
+                trashes.get(position).getTrashPin().getDistance((double)0,(double)0)));
         return layoutItem;
     }
 }

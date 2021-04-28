@@ -14,6 +14,10 @@ public class TrashPin {
         this.y = y;
     }
 
+    public double getDistance(double x, double y){
+        return Math.sqrt(Math.pow(this.x - x,2)+Math.pow(this.y - y,2));
+    }
+
     public TrashPin(JSONObject obj) throws JSONException {
         x = obj.getDouble("x");
         y = obj.getDouble("y");

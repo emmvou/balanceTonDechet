@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,11 @@ public class ItineraireFragment extends Fragment {
         listView.setAdapter(trashAdapter);
 
         return view;
+    }
+
+    public void onCheckBoxClicked(View view){
+        //boolean checked = ((CheckBox) view).isChecked();
+        //todo traitement
     }
 
 }
