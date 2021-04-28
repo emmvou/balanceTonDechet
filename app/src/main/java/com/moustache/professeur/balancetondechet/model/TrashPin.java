@@ -19,11 +19,27 @@ public class TrashPin {
         y = obj.getDouble("y");
     }
 
+    @Override
+    public String toString() {
+        return "TrashPin{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
     private GeoPoint toGeoPoint() {
         return new GeoPoint(x, y);
     }
 
     public OverlayItem toOverlayItem() {
         return new OverlayItem("aTile", "aSnippet", toGeoPoint());
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

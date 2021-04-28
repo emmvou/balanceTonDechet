@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_green"
     tools:context=".view.ProfileActivity">
 
     <LinearLayout
@@ -14,48 +15,49 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:padding="20dp"
-            android:background="#04F06A">
+            android:background="@color/darker_green"
+            android:padding="20dp">
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="?attr/homeAsUpIndicator"
                 android:id="@+id/backbutton"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
-
-            <TextView
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:fontFamily="sans-serif"
-                android:text="Prenom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="?attr/homeAsUpIndicator" />
+
+            <TextView
                 android:id="@+id/prenom"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp" />
-
-            <TextView
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:fontFamily="sans-serif"
-                android:text="Nom"
-                android:layout_toRightOf="@+id/prenom"
-                android:id="@+id/nom"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/concertone_regular"
+                android:text="Prenom"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/nom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/prenom"
+                android:fontFamily="@font/concertone_regular"
+                android:text="Nom"
                 android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/prenom"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/concertone_regular"
                 android:includeFontPadding="false"
                 android:text="email@test.com"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
         </RelativeLayout>
@@ -63,67 +65,73 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:hint="Prenom"
-                app:boxBackgroundColor="@color/white"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="10dp">
+                app:boxBackgroundColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:id="@+id/prenom_edit"
-                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent" />
+                    android:background="@color/light_green"
+                    android:drawableLeft="@drawable/ic_baseline_person_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/concertone_regular" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:hint="Nom"
-                app:boxBackgroundColor="@color/white"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="10dp">
+                app:boxBackgroundColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:id="@+id/nom_edit"
-                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent" />
+                    android:background="@color/light_green"
+                    android:drawableLeft="@drawable/ic_baseline_person_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/concertone_regular" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Email"
-                app:boxBackgroundColor="@color/white"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="10dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="Email"
+                app:boxBackgroundColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:id="@+id/email_edit"
-                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent" />
+                    android:background="@color/light_green"
+                    android:drawableLeft="@drawable/ic_baseline_person_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/concertone_regular" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:backgroundTint="#04F06A"
-                android:textColor="@color/black"
-                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:backgroundTint="@color/imperial_blue"
+                android:fontFamily="@font/concertone_regular"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:layout_width="match_parent"
-                android:text="Enregistrer"/>
+                android:text="Enregistrer"
+                android:textColor="@color/beige" />
 
         </LinearLayout>
 

@@ -53,9 +53,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("User",MainMenuActivity.this.currentUser);
 
             switch (item.getItemId()){
                 case R.id.nav_carte:
@@ -69,6 +72,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     break;
             }
 
+            selectedFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
             return true;
         }

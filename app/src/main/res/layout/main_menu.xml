@@ -19,7 +19,9 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="wrap_content"
+            app:titleTextColor="@color/beige"
             android:layout_width="match_parent"
+            android:backgroundTint="@color/imperial_blue"
             android:background="@color/teal_700"/>
 
         <FrameLayout
@@ -33,9 +35,11 @@
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+            app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
             android:layout_alignParentBottom="true"
             app:menu="@menu/bottom_navigation"
-            android:background="?android:attr/windowBackground"/>
+            android:background="@color/imperial_blue"/>
 
     </RelativeLayout>
 
