@@ -94,7 +94,7 @@ public class MapFragment extends Fragment {
     }
 
     private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
-        ArrayList result = new ArrayList();
+        ArrayList result = new ArrayList<String>();
 
         for (String perm : wanted) {
             if (!hasPermission(perm)) {
