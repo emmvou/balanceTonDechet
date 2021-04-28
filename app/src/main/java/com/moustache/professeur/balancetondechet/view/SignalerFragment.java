@@ -114,7 +114,7 @@ public class SignalerFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TrashPin tp = new TrashPin((float)SignalerFragment.this.locationTrack.getLatitude(),(float)SignalerFragment.this.locationTrack.getLongitude());
+                TrashPin tp = new TrashPin(SignalerFragment.this.locationTrack.getLatitude(),SignalerFragment.this.locationTrack.getLongitude());
                 Log.v("DECHET",tp.toString());
                 Trash t = new Trash(nomTextField.getText().toString(),descTextfield.getText().toString(),tp);
                 Log.v("DECHET",t.getDesc()+" - "+t.getName()+ " - "+t.getTrashPin().toString());

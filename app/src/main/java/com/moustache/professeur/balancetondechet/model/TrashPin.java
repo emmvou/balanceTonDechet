@@ -9,7 +9,7 @@ public class TrashPin {
     private final double x;
     private final double y;
 
-    public TrashPin(float x, float y) {
+    public TrashPin(double x, double y) {
         this.x = x;
         this.y = y;
     }
