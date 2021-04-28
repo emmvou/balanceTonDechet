@@ -1,4 +1,4 @@
-package com.moustache.professeur.balancetondechet.model;
+package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.utils.Pair;
 
 import java.util.Locale;
