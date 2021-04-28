@@ -15,6 +15,7 @@ public class Trash {
     private TrashPin trashPin;
     private String name;
     private String desc;
+    private String userEmail;
     private boolean isPickedUp = false;
     private boolean isApproved = false;
 
@@ -26,12 +27,13 @@ public class Trash {
         this.trashPin = trashPin;
     }
 
-    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved){
+    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;
         this.isApproved = isApproved;
         this.isPickedUp = isPickedUp;
+        this.userEmail = userEmail;
     }
 
     public String getDesc() {
@@ -76,9 +78,10 @@ public class Trash {
         TrashPin pin = new TrashPin(obj);
         String name = obj.getString("name");
         String desc = obj.getString("desc");
+        String userEmail = obj.getString("userEmail");
         boolean isPickedUp = obj.getBoolean("isPickedUp");
         boolean isApproved = obj.getBoolean("isApproved");
 
-        return new Trash(name, desc, pin, isPickedUp, isApproved);
+        return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail);
     }
 }

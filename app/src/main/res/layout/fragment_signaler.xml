@@ -1,14 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_light">
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Signaler déchet"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
+    android:background="@color/light_green"
+    tools:context=".view.ProfileActivity">
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+            <TextView
+                android:textColor="@color/imperial_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:fontFamily="@font/concertone_regular"
+                android:text="Signaler un déchet"
+                android:id="@+id/prenom"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="@color/light_green"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:hint="Nom"
+                app:boxBackgroundColor="@color/white"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nomDechet_edit"
+                    android:fontFamily="@font/concertone_regular"
+                    android:background="@color/light_green"
+                    android:drawablePadding="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/photo_dechet"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/darker_green"
+                android:layout_weight="1"
+                android:layout_width="300dp"
+                android:layout_height="200dp">
+            </ImageView>
+
+            <Button
+                android:id="@+id/pictureButton"
+                android:backgroundTint="@color/imperial_blue"
+                android:textColor="@color/beige"
+                android:fontFamily="@font/concertone_regular"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:text="Prendre une photo"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:hint="Description"
+                app:boxBackgroundColor="@color/white"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionDechet_edit"
+                    android:gravity="top|left"
+                    android:fontFamily="@font/concertone_regular"
+                    android:background="@color/light_green"
+                    android:lines="8"
+                    android:minLines="6"
+                    android:drawablePadding="10dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/reportButton"
+                android:backgroundTint="@color/imperial_blue"
+                android:textColor="@color/beige"
+                android:fontFamily="@font/concertone_regular"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:text="Signaler"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</ScrollView>
