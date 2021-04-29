@@ -13,15 +13,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import java.util.Objects;
+import java.util.function.Consumer;
+
 public class LocationTrack extends Service implements LocationListener {
 
     private final Context mContext;
 
+    private Consumer<Location> locationChangedCallback;
 
     boolean checkGPS = false;
 
@@ -38,7 +43,7 @@ public class LocationTrack extends Service implements LocationListener {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 
 
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
     protected LocationManager locationManager;
 
     public LocationTrack(Context mContext) {
@@ -133,6 +138,10 @@ public class LocationTrack extends Service implements LocationListener {
         return loc;
     }
 
+    public void setLocationChangedCallback(Consumer<Location> callback) {
+        locationChangedCallback = callback;
+    }
+
     public double getLongitude() {
         if (loc != null) {
             longitude = loc.getLongitude();
@@ -203,7 +212,10 @@ public class LocationTrack extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        loc = location;
+        if (!Objects.isNull(location)) {
+            locationChangedCallback.accept(location);
+        }
     }
 
     @Override
