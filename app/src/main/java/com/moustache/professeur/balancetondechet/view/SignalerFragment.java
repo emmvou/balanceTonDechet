@@ -110,6 +110,8 @@ public class SignalerFragment extends Fragment {
         descTextfield = (EditText) view.findViewById(R.id.descriptionDechet_edit);
         nomTextField = (EditText) view.findViewById(R.id.nomDechet_edit);
 
+        locationTrack.setLocationChangedCallback((location -> {}));
+
         Button reportButton = (Button) view.findViewById(R.id.reportButton);
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,5 +223,6 @@ public class SignalerFragment extends Fragment {
                 .create()
                 .show();
     }
+
 
 }
