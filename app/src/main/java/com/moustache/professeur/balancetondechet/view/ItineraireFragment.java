@@ -1,6 +1,9 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +24,8 @@ import androidx.fragment.app.Fragment;
 
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.model.TrashPin;
 
 import java.util.ArrayList;
 
@@ -31,7 +37,7 @@ public class ItineraireFragment extends Fragment {
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
     private ArrayList<String> permissions = new ArrayList<String>();
-
+    private ListView listView;
 
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
@@ -62,7 +68,7 @@ public class ItineraireFragment extends Fragment {
         }
 
         ListTrash listTrash = new ListTrash(getContext());
-        ListView listView = view.findViewById(R.id.listView);
+        listView = view.findViewById(R.id.listView);
         initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
         //TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
         //listView.setAdapter(trashAdapter);
@@ -169,6 +175,19 @@ public class ItineraireFragment extends Fragment {
                     return true;
                 case R.id.export:
                     //todo et là on copie les positions vers le presse-papier
+                    ListTrash trashes =  ((TrashAdapter)listView.getAdapter()).getCheckedTrashes();
+                    StringBuilder data = new StringBuilder();
+                    data.append("Latitude,Longitude");
+                    for(int i = 0; i < trashes.size(); i++){
+                        TrashPin t = trashes.get(i).getTrashPin();
+                        data.append("\n"+ t.getX() +","+t.getY());
+                    }
+
+                    ClipboardManager clipboard = (ClipboardManager) ItineraireFragment.this.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Coordonnées", data.toString());
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(ItineraireFragment.this.getContext(), "Copié", Toast.LENGTH_SHORT).show();
                     return true;
                 default:
                     return false;
