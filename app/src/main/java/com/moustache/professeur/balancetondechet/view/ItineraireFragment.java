@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.ITrashAdapterListener;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.Trash;
 
 import java.util.ArrayList;
 
@@ -60,7 +63,7 @@ public class ItineraireFragment extends Fragment {
         ListView listView = view.findViewById(R.id.listView);
         TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
         listView.setAdapter(trashAdapter);
-
+        //trashAdapter.addListener(this);
         return view;
     }
 
@@ -136,9 +139,5 @@ public class ItineraireFragment extends Fragment {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
-    public void onCheckBoxClicked(View view){
-        //boolean checked = ((CheckBox) view).isChecked();
-        //todo traitement
-    }
 
 }
