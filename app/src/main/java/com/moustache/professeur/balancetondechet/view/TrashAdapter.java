@@ -19,6 +19,7 @@ import com.moustache.professeur.balancetondechet.utils.Pair;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TrashAdapter extends BaseAdapter {
 
@@ -83,9 +84,17 @@ public class TrashAdapter extends BaseAdapter {
 
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             mChecked[(Integer)buttonView.getTag()] = isChecked; // get the tag so we know the row and store the status
-            Log.v("CHECKBOX", "alors salut, donc là on vient de cliquer sur la checkbox");
+            if(isChecked){
+                trashes.get((Integer) buttonView.getTag());
+                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName()+" checked");
+            } else{
+                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName()+" unchecked");
+            }
         }
     };
 
-    //recuperer la liste de tous les items cochés
+    public ListTrash getCheckedTrashes(){
+        return trashes.stream().filter(t-> mChecked[trashes.indexOf(t)]).collect(Collectors.toCollection(ListTrash::new));
+    }
+
 }

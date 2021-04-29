@@ -12,4 +12,7 @@ public class ListTrash extends ArrayList<Trash> {
     public ListTrash(ListTrash lst){
         addAll(lst);
     }
+
+    public ListTrash(){}
+
 }
