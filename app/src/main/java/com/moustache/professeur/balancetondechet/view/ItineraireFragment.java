@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.moustache.professeur.balancetondechet.R;
-import com.moustache.professeur.balancetondechet.model.ITrashAdapterListener;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
-import com.moustache.professeur.balancetondechet.model.Trash;
 
 import java.util.ArrayList;
 
@@ -32,8 +32,10 @@ public class ItineraireFragment extends Fragment {
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
     private ArrayList<String> permissions = new ArrayList<String>();
 
+
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
+
 
     @Nullable
     @Override
@@ -66,6 +68,15 @@ public class ItineraireFragment extends Fragment {
         //listView.setAdapter(trashAdapter);
         //trashAdapter.addListener(this);
         locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), listTrash, loc.getLatitude(), loc.getLongitude())));
+
+        Button more = view.findViewById(R.id.more);
+        more.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(view.getContext(), v);
+            popup.setOnMenuItemClickListener(popListener);
+            popup.inflate(R.menu.menu_more);
+            popup.show();
+        });
+
         return view;
     }
 
@@ -144,5 +155,28 @@ public class ItineraireFragment extends Fragment {
     private void initAdapter(ListView listView, TrashAdapter trashAdapter){
         listView.setAdapter(trashAdapter);
     }
+
+
+    PopupMenu.OnMenuItemClickListener popListener = new PopupMenu.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch(item.getItemId()){
+                case R.id.filter:
+                    //todo alors là on appelle la page pour appliquer les filtres
+                    return true;
+                case R.id.reachall:
+                    //todo là on active la carte
+                    return true;
+                case R.id.export:
+                    //todo et là on copie les positions vers le presse-papier
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    };
+
+
+
 
 }

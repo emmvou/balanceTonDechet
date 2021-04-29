@@ -8,4 +8,8 @@ public class ListTrash extends ArrayList<Trash> {
     public ListTrash(Context ctx){
         addAll(Trash.parseMultipleFromJson(ctx));
     }
+
+    public ListTrash(ListTrash lst){
+        addAll(lst);
+    }
 }
