@@ -3,7 +3,7 @@ package com.moustache.professeur.balancetondechet.view;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.Context;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,13 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
-import com.moustache.professeur.balancetondechet.model.TrashPin;
-import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -36,7 +32,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +48,7 @@ public class MapFragment extends Fragment {
     LocationTrack locationTrack;
 
     private List<Trash> trashes;
+    private OverlayItem user;
 
     @Nullable
     @Override
@@ -87,8 +83,7 @@ public class MapFragment extends Fragment {
         map = view.findViewById(R.id.map);
 
         initializeMap();
-
-        addPinPoints();
+        locationTrack.setLocationChangedCallback((loc) -> addPinPoints());
 
         return view;
     }
@@ -174,15 +169,24 @@ public class MapFragment extends Fragment {
         mapController = map.getController();
         mapController.setCenter(startPoint);
         mapController.setZoom(18.0);
+
+        PinFactory.loadFromContext(getContext());
     }
 
     private void addPinPoints() {
+        map.getOverlays().clear();
+
         trashes = parsePins();
         ArrayList<OverlayItem> pins = trashes
                 .stream()
                 .map(Trash::getTrashPin)
-                .map(TrashPin::toOverlayItem)
+                .map((pin) -> pin.toOverlayItem(getContext()))
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        updateUserPin();
+        pins.add(user);
+
+        mapController.setCenter(user.getPoint());
 
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
                 getContext(),
@@ -205,6 +209,10 @@ public class MapFragment extends Fragment {
 
     private List<Trash> parsePins() {
         return Trash.parseMultipleFromJson(getContext());
+    }
+
+    private void updateUserPin() {
+        user = PinFactory.userPin(locationTrack.getLatitude(), locationTrack.getLongitude());
     }
 
     @Override

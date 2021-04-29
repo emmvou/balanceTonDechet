@@ -1,5 +1,6 @@
 package com.moustache.professeur.balancetondechet.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -51,8 +52,9 @@ public class TrashPin {
         return new GeoPoint(x, y);
     }
 
-    public OverlayItem toOverlayItem() {
-        return new OverlayItem("aTile", "aSnippet", toGeoPoint());
+    public OverlayItem toOverlayItem(Context context) {
+        PinFactory.loadFromContext(context);
+        return PinFactory.trashPin(x, y);
     }
 
     public double getX() {
