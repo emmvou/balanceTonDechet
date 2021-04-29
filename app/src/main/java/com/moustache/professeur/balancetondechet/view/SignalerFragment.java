@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +23,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.User;
@@ -136,9 +140,29 @@ public class SignalerFragment extends Fragment {
                     e.printStackTrace();
                 }
                 Log.v("json",object.toString());
+
+                new CountDownTimer(30000, 1000)
+                {
+                    @Override
+                    public void onTick(long millisUntilFinished)
+                    {
+                        Log.d("timer", millisUntilFinished / 1000 + " seconds remaining !");
+                    }
+
+                    @Override
+                    public void onFinish()
+                    {
+                        new NotificationBuilder().sendNotificationOnChannel(
+                                "Déchet ramassé",
+                                "Une personne a ramassé le déchet que vous avez précédemment signalé !",
+                                NotificationManager.CHANNEL_2,
+                                R.drawable.trash,
+                                NotificationCompat.PRIORITY_DEFAULT,
+                                getContext());
+                    }
+                }.start();
             }
         });
-
 
         return view;
     }
