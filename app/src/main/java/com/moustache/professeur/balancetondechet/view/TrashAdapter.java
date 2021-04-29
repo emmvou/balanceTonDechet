@@ -86,4 +86,6 @@ public class TrashAdapter extends BaseAdapter {
             Log.v("CHECKBOX", "alors salut, donc là on vient de cliquer sur la checkbox");
         }
     };
+
+    //recuperer la liste de tous les items cochés
 }

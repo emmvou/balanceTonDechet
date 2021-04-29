@@ -61,9 +61,11 @@ public class ItineraireFragment extends Fragment {
 
         ListTrash listTrash = new ListTrash(getContext());
         ListView listView = view.findViewById(R.id.listView);
-        TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
-        listView.setAdapter(trashAdapter);
+        initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
+        //TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
+        //listView.setAdapter(trashAdapter);
         //trashAdapter.addListener(this);
+        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), listTrash, loc.getLatitude(), loc.getLongitude())));
         return view;
     }
 
@@ -139,5 +141,8 @@ public class ItineraireFragment extends Fragment {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
+    private void initAdapter(ListView listView, TrashAdapter trashAdapter){
+        listView.setAdapter(trashAdapter);
+    }
 
 }
