@@ -98,3 +98,7 @@ public class TrashAdapter extends BaseAdapter {
     }
 
 }
+
+//idées pour ajouter des filtres:
+//https://zatackcoder.com/multiple-filters-and-sorting-in-android/
+//https://pragmaapps.com/android-multiple-filters/
