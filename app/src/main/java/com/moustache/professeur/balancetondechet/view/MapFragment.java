@@ -62,6 +62,7 @@ public class MapFragment extends Fragment {
         if(bundle != null){
             selectedTrashes = bundle.getParcelable("trashList");
             trashes = bundle.getParcelableArrayList("trashes");
+            //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
             Log.v("PATH","there is at least one path to follow");
         }
