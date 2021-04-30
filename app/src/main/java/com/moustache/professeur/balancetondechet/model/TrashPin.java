@@ -1,6 +1,8 @@
 package com.moustache.professeur.balancetondechet.model;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -9,7 +11,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.Distance;
 import org.osmdroid.views.overlay.OverlayItem;
 
-public class TrashPin {
+public class TrashPin implements Parcelable {
     private final double x;
     private final double y;
 
@@ -17,6 +19,23 @@ public class TrashPin {
         this.x = x;
         this.y= y;
     }
+
+    protected TrashPin(Parcel in) {
+        x = in.readDouble();
+        y = in.readDouble();
+    }
+
+    public static final Creator<TrashPin> CREATOR = new Creator<TrashPin>() {
+        @Override
+        public TrashPin createFromParcel(Parcel in) {
+            return new TrashPin(in);
+        }
+
+        @Override
+        public TrashPin[] newArray(int size) {
+            return new TrashPin[size];
+        }
+    };
 
     //formula : https://www.movable-type.co.uk/scripts/latlong.html
     public double getDistance(double dx, double dy){
@@ -63,5 +82,16 @@ public class TrashPin {
 
     public double getY() {
         return y;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(x);
+        dest.writeDouble(y);
     }
 }

@@ -1,6 +1,8 @@
 package com.moustache.professeur.balancetondechet.model;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
@@ -11,7 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Trash {
+public class Trash implements Parcelable {
     private TrashPin trashPin;
     private String name;
     private String desc;
@@ -35,6 +37,27 @@ public class Trash {
         this.isPickedUp = isPickedUp;
         this.userEmail = userEmail;
     }
+
+    protected Trash(Parcel in) {
+        name = in.readString();
+        desc = in.readString();
+        userEmail = in.readString();
+        isPickedUp = in.readByte() != 0;
+        isApproved = in.readByte() != 0;
+        trashPin = in.readParcelable(TrashPin.class.getClassLoader());
+    }
+
+    public static final Creator<Trash> CREATOR = new Creator<Trash>() {
+        @Override
+        public Trash createFromParcel(Parcel in) {
+            return new Trash(in);
+        }
+
+        @Override
+        public Trash[] newArray(int size) {
+            return new Trash[size];
+        }
+    };
 
     public String getDesc() {
         return desc;
@@ -83,5 +106,21 @@ public class Trash {
         boolean isApproved = obj.getBoolean("isApproved");
 
         return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(name);
+        dest.writeString(desc);
+        dest.writeString(userEmail);
+        dest.writeByte((byte) (isPickedUp ? 1 : 0));
+        dest.writeByte((byte) (isApproved ? 1 : 0));
+        dest.writeParcelable(trashPin, flags);
     }
 }
