@@ -67,4 +67,14 @@ public class User implements Parcelable {
     public ArrayList<Trash> getPickedUpTrashs() {
         return pickedUpTrashs;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", pickedUpTrashs=" + pickedUpTrashs +
+                '}';
+    }
 }
