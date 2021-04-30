@@ -9,8 +9,12 @@ import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 import com.moustache.professeur.balancetondechet.view.MainMenuActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserController {
 
@@ -23,25 +27,29 @@ public class UserController {
         String prenomJson = null;
         String nomJson = null;
 
-        String parsedUser = JsonParser.getJsonFromAssets(applicationContext,"users.json");
-        Log.v("JSON : ",parsedUser);
-
         try {
-            JSONObject jObject = new JSONObject(parsedUser);
-            emailJson = jObject.getString("email");
-            mdpJson = jObject.getString("mdp");
-            nomJson = jObject.getString("nom");
-            prenomJson = jObject.getString("prenom");
+            JSONObject obj = new JSONObject(JsonParser.getJsonFromAssets(applicationContext,"users.json"));
+            JSONArray m_jArry = obj.getJSONArray("users");
+            ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m_li;
+
+            for (int i = 0; i < m_jArry.length(); i++) {
+                JSONObject jo_inside = m_jArry.getJSONObject(i);
+                Log.d("Details-->", jo_inside.getString("email"));
+                String email_value = jo_inside.getString("email");
+                String mdp_value = jo_inside.getString("mdp");
+                if ((emailTextField.compareTo(email_value) == 0) && (mdpTextField.compareTo(mdp_value) == 0 )){
+                    String nom_value = jo_inside.getString("nom");
+                    String prenom_value = jo_inside.getString("prenom");
+                    User currentUser = new User(email_value,nom_value,prenom_value);
+                    return currentUser;
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //Connexion de l'utilisateur
-        if ((emailTextField.compareTo(emailJson) == 0) && (mdpTextField.compareTo(mdpJson) == 0 )){
-            User currentUser = new User(emailJson,nomJson,prenomJson);
-            return currentUser;
-        }
-        else return null;
+        return null;
     }
 
     public void pickUpTrash(User u, Trash t){
