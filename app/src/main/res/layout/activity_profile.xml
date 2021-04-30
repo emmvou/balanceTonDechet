@@ -123,18 +123,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/notif_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="@color/imperial_blue"
-                android:fontFamily="@font/concertone_regular"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="Paramètres de notifications"
-                android:textColor="@color/beige" />
-
-            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

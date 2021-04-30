@@ -42,7 +42,7 @@
 
         <activity
             android:name=".view.ProfileNotificationsActivity"
-            android:parentActivityName=".view.ProfileActivity" >
+            android:parentActivityName=".view.MainMenuActivity" >
         </activity>
     </application>
 

@@ -60,16 +60,5 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.notif_button).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(getApplicationContext(), ProfileNotificationsActivity.class);
-                intent.putExtra("user", currentUser);
-                startActivity(intent);
-            }
-        });
-
     }
 }

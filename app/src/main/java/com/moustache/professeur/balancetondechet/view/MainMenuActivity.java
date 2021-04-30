@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -102,6 +103,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 intentProfile.putExtra("user",currentUser);
                 startActivity(intentProfile);
                 break;
+            case R.id.drawer_notifs:
+                Intent intent = new Intent(getApplicationContext(), ProfileNotificationsActivity.class);
+                intent.putExtra("user", currentUser);
+                startActivityForResult(intent, 0);
             default:
                 break;
         }
@@ -130,4 +135,24 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.d("user in main activity", currentUser.toString());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("user received", data.getExtras().getParcelable("user").toString());
+
+        if(requestCode == 0)
+        {
+            User user = data.getExtras().getParcelable("user");
+            currentUser = user;
+        }
+    }
 }

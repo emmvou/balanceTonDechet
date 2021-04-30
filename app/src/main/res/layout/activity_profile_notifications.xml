@@ -74,6 +74,7 @@
                 android:orientation="horizontal">
 
                 <CheckBox
+                    android:id="@+id/checkbox_wants_notifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -101,6 +102,7 @@
                         android:text="Envoyer une notification lorsque je passe à moins de" />
 
                     <EditText
+                        android:id="@+id/trigger_distance"
                         android:layout_width="50sp"
                         android:layout_height="wrap_content"
                         android:inputType="number"/>
@@ -127,20 +129,24 @@
                     android:layout_marginEnd="20sp"/>
 
                 <RadioGroup
+                    android:id="@+id/group_priority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
 
                     <RadioButton
+                        android:id="@+id/low_priority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Basse" />
 
                     <RadioButton
+                        android:id="@+id/default_priority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Normale" />
 
                     <RadioButton
+                        android:id="@+id/high_priority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Elevée" />
@@ -150,6 +156,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/button_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
