@@ -2,6 +2,7 @@ package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,12 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.User;
+import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +38,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private User currentUser;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private ArrayList<Trash> trashes = new ArrayList<Trash>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +46,26 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.main_menu);
         currentUser = getIntent().getExtras().getParcelable("user");
 
+        try {
+            trashes = LoadTrashes.chargerDechets(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (Trash t : trashes){
+            Log.v("LIST",t.toString());
+        }
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapFragment()).commit();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("trashes",MainMenuActivity.this.trashes);
+        Fragment initFragment = new MapFragment();
+        initFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,initFragment).commit();
 
         this.configureToolBar();
 
@@ -59,6 +82,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             Fragment selectedFragment = null;
             Bundle bundle = new Bundle();
             bundle.putParcelable("User",MainMenuActivity.this.currentUser);
+            bundle.putParcelableArrayList("trashes",MainMenuActivity.this.trashes);
 
             switch (item.getItemId()){
                 case R.id.nav_carte:
@@ -101,7 +125,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             case R.id.drawer_profil:
                 Log.v("Drawer","PROFIL");
                 Intent intentProfile = new Intent(this, ProfileActivity.class);
-                intentProfile.putExtra("user",currentUser);
+                intentProfile.putExtra("user",(Parcelable)currentUser);
                 startActivity(intentProfile);
                 break;
             default:

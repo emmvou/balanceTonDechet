@@ -4,9 +4,10 @@ package com.moustache.professeur.balancetondechet.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Parcelable {
+public class User implements Parcelable, Serializable {
     private String email;
     private String nom;
     private String prenom;

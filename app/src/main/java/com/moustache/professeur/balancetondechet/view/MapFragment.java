@@ -21,6 +21,7 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
@@ -34,6 +35,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +52,7 @@ public class MapFragment extends Fragment {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
 
-    private List<Trash> trashes;
+    private ArrayList<Trash> trashes;
     private OverlayItem user;
 
     @Nullable
@@ -59,6 +61,7 @@ public class MapFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null){
             selectedTrashes = bundle.getParcelable("trashList");
+            trashes = bundle.getParcelableArrayList("trashes");
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
             Log.v("PATH","there is at least one path to follow");
         }
@@ -92,7 +95,15 @@ public class MapFragment extends Fragment {
         map = view.findViewById(R.id.map);
 
         initializeMap();
-        locationTrack.setLocationChangedCallback((loc) -> addPinPoints());
+        locationTrack.setLocationChangedCallback((loc) -> {
+            try {
+                addPinPoints();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
 
         return view;
     }
@@ -182,10 +193,12 @@ public class MapFragment extends Fragment {
         PinFactory.loadFromContext(getContext());
     }
 
-    private void addPinPoints() {
+    private void addPinPoints() throws IOException, ClassNotFoundException {
         map.getOverlays().clear();
 
-        trashes = parsePins();
+        //trashes = parsePins();
+        //trashes = LoadTrashes.chargerDechets(MapFragment.this.getContext());
+
         ArrayList<OverlayItem> pins = trashes
                 .stream()
                 .map(Trash::getTrashPin)

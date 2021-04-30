@@ -30,6 +30,7 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.User;
+import com.moustache.professeur.balancetondechet.persistance.SaveTrashes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +49,9 @@ public class SignalerFragment extends Fragment {
     private EditText descTextfield;
     private ImageView imageView;
     private Button pictureButton;
+    private Button reportButton;
     private static FileWriter fileWriter;
+    private ArrayList<Trash> trashes;
 
 
     private ArrayList<String> permissionsToRequest;
@@ -62,6 +65,7 @@ public class SignalerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signaler,container,false);
 
+        reportButton = (Button) view.findViewById(R.id.reportButton);
         pictureButton =(Button) view.findViewById(R.id.pictureButton);
         imageView = (ImageView) view.findViewById(R.id.photo_dechet);
 
@@ -106,6 +110,9 @@ public class SignalerFragment extends Fragment {
            currentUser = getArguments().getParcelable("User");
         }
         Log.v("USER",currentUser.getNom());
+        if (getArguments().getParcelableArrayList("trashes")!=null){
+            trashes = getArguments().getParcelableArrayList("trashes");
+        }
 
         descTextfield = (EditText) view.findViewById(R.id.descriptionDechet_edit);
         nomTextField = (EditText) view.findViewById(R.id.nomDechet_edit);
@@ -128,14 +135,11 @@ public class SignalerFragment extends Fragment {
                     object.put("isApproved", "true");
                     object.put("x", tp.getX());
                     object.put("y", tp.getY());
-                    fileWriter = new FileWriter("/trashes.json");
-                    fileWriter.write(object.toString());
-                    fileWriter.flush();
-                    fileWriter.close();
+                    trashes.add(t);
+                    SaveTrashes.sauvegarderDechets(trashes,view.getContext());
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
-                Log.v("json",object.toString());
             }
         });
 

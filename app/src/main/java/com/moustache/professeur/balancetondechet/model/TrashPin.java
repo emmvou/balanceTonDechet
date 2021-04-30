@@ -11,7 +11,9 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.Distance;
 import org.osmdroid.views.overlay.OverlayItem;
 
-public class TrashPin implements Parcelable {
+import java.io.Serializable;
+
+public class TrashPin implements Parcelable, Serializable {
     private final double x;
     private final double y;
 
