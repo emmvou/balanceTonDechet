@@ -93,8 +93,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
 
         switch (id){
-            case R.id.drawer_logout :
+            case R.id.drawer_logout:
                 Log.v("Drawer","LOGOUT");
+                Intent intentLogout = new Intent(this, LoginActivity.class);
+                startActivity(intentLogout);
                 break;
             case R.id.drawer_profil:
                 Log.v("Drawer","PROFIL");
