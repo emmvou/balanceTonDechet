@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
 
@@ -39,6 +41,7 @@ import java.util.stream.Collectors;
 public class MapFragment extends Fragment {
     private MapView map;
     private IMapController mapController;
+    private ListTrash selectedTrashes;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
@@ -53,6 +56,12 @@ public class MapFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            selectedTrashes = bundle.getParcelable("trashList");
+            //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
+            Log.v("PATH","there is at least one path to follow");
+        }
         View view = inflater.inflate(R.layout.fragment_map,container,false);
 
         Configuration.getInstance().load(

@@ -50,7 +50,7 @@ public class TrashPin implements Parcelable {
         double a = Math.sin(deltaphi/2)*Math.sin(deltaphi/2)+Math.cos(phi1)*Math.cos(phi2)*Math.sin(deltalambda/2)*Math.sin(deltalambda/2);
         double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         double d = R*c; //m
-        Log.v("DISTANCE", "distance between points : "+String.valueOf(d)+"m");
+        Log.v("DISTANCE", "distance between {"+this.x+":"+this.y+"} et {"+dx+":"+dy+"} : "+String.valueOf(d)+"m");
         return d/1000; //km
     }
 

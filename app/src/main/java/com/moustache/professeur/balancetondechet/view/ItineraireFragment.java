@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -171,10 +172,15 @@ public class ItineraireFragment extends Fragment {
                     //todo alors là on appelle la page pour appliquer les filtres
                     return true;
                 case R.id.reachall:
-                    //todo là on active la carte
+                    //là on active la carte
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("trashList", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes());
+                    Fragment fragment = new MapFragment();
+                    fragment.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit();
                     return true;
                 case R.id.export:
-                    //todo et là on copie les positions vers le presse-papier
+                    //et là on copie les positions vers le presse-papier
                     ListTrash trashes =  ((TrashAdapter)listView.getAdapter()).getCheckedTrashes();
                     StringBuilder data = new StringBuilder();
                     data.append("Latitude,Longitude");

@@ -55,15 +55,14 @@ public class TrashAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout layoutItem;
-        layoutItem = (LinearLayout) (convertView==null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
-        ((TextView)layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
-        ((TextView)layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE,"%1.1f km",
-                trashes.get(position).getTrashPin().getDistance(location.getFirst(),location.getSecond())));
-        if(convertView == null){
-
-        ((CheckBox)layoutItem.findViewById(R.id.toPick)).setChecked(true);
+        layoutItem = (LinearLayout) (convertView == null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
+        ((TextView) layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
+        ((TextView) layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE, "%1.1f km",
+                trashes.get(position).getTrashPin().getDistance(location.getFirst(), location.getSecond())));
+        if (convertView == null) {
+            ((CheckBox) layoutItem.findViewById(R.id.toPick)).setChecked(true);
         }
-        CheckBox cBox = (CheckBox)layoutItem.findViewById(R.id.toPick);
+        CheckBox cBox = (CheckBox) layoutItem.findViewById(R.id.toPick);
         //https://stackoverflow.com/questions/12647001/listview-with-custom-adapter-containing-checkboxes
         //CheckBox cbox = (CheckBox)layoutItem.findViewById(R.id.toPick);
         cBox.setTag(Integer.valueOf(position));
@@ -83,18 +82,18 @@ public class TrashAdapter extends BaseAdapter {
     CompoundButton.OnCheckedChangeListener mListener = new CompoundButton.OnCheckedChangeListener() {
 
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            mChecked[(Integer)buttonView.getTag()] = isChecked; // get the tag so we know the row and store the status
-            if(isChecked){
+            mChecked[(Integer) buttonView.getTag()] = isChecked; // get the tag so we know the row and store the status
+            if (isChecked) {
                 trashes.get((Integer) buttonView.getTag());
-                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName()+" checked");
-            } else{
-                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName()+" unchecked");
+                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName() + " checked");
+            } else {
+                Log.v("CHECKBOX", trashes.get((Integer) buttonView.getTag()).getName() + " unchecked");
             }
         }
     };
 
-    public ListTrash getCheckedTrashes(){
-        return trashes.stream().filter(t-> mChecked[trashes.indexOf(t)]).collect(Collectors.toCollection(ListTrash::new));
+    public ListTrash getCheckedTrashes() {
+        return trashes.stream().filter(t -> mChecked[trashes.indexOf(t)]).collect(Collectors.toCollection(ListTrash::new));
     }
 
 }
