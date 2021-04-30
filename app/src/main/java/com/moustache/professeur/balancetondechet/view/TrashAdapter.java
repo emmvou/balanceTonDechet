@@ -13,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ITrashAdapterListener;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.utils.Pair;
 
 import java.util.Arrays;
@@ -28,13 +30,36 @@ public class TrashAdapter extends BaseAdapter {
     private ITrashAdapterListener listener;
     private Pair<Double, Double> location;
     private Boolean[] mChecked;
+    private double[] distance;
 
     public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y) {
         this.trashes = listTrash;
         this.inflater = LayoutInflater.from(ctx);
         location = Pair.of(x, y);
         mChecked = new Boolean[trashes.size()];
+        distance = new double[trashes.size()];
+        for(int i = 0; i < trashes.size(); i++){
+            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
+        }
         Arrays.fill(mChecked, true);
+    }
+
+    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
+        this.trashes = listTrash;
+        this.inflater = LayoutInflater.from(ctx);
+        location = Pair.of(x, y);
+        distance = new double[trashes.size()];
+        for(int i = 0; i < trashes.size(); i++){
+            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
+        }
+        if(filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE){
+
+        mChecked = new Boolean[trashes.size()];
+        Arrays.fill(mChecked, true);
+        }
+        else{
+            applyDistFilter(filter.getDistance());
+        }
     }
 
     @Override
@@ -94,6 +119,17 @@ public class TrashAdapter extends BaseAdapter {
 
     public ListTrash getCheckedTrashes() {
         return trashes.stream().filter(t -> mChecked[trashes.indexOf(t)]).collect(Collectors.toCollection(ListTrash::new));
+    }
+
+    public void applyDistFilter(double dist){
+        trashes = trashes.stream().filter(t -> distance[trashes.indexOf(t)] < dist).collect(Collectors.toCollection(ListTrash::new));
+        mChecked = new Boolean[trashes.size()];
+        distance = new double[trashes.size()];
+        for(int i = 0; i < trashes.size(); i++){
+            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
+        }
+        Arrays.fill(mChecked, true);
+        Log.v("FILTER", trashes.toString());
     }
 
 }
