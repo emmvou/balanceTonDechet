@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import java.util.Optional;
+
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
@@ -175,29 +177,29 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
             if(currentUser.getWantsToBeNotified() != 0)
             {
-                ListTrash listTrash;
+                double x = location.getLatitude();
+                double y = location.getLongitude();
+                ListTrash listTrash = new ListTrash();
 
                 try
                 {
                     listTrash = new ListTrash(getApplicationContext());
                 }
-                catch(ClassNotFoundException | IOException e)
+                catch (IOException | ClassNotFoundException e)
                 {
                     e.printStackTrace();
-                    listTrash = new ListTrash();
                 }
 
-                Optional<Trash> minDistance = listTrash.stream().min( (trash1, trash2) ->
+                Optional<Trash> closestTrash = listTrash.stream().min( (trash1, trash2) ->
                 {
-                    double d1 = trash1.getTrashPin().getDistance(location.getLatitude(), location.getLongitude());
-                    double d2 = trash2.getTrashPin().getDistance(location.getLatitude(), location.getLongitude());
-
+                    double d1 = trash1.getTrashPin().getDistance(x, y);
+                    double d2 = trash2.getTrashPin().getDistance(x, y);
                     return Double.compare(d1, d2);
                 });
 
-                double minDistanceDouble = minDistance.map(trash -> trash.getTrashPin().getDistance(location.getLatitude(), location.getLongitude())).orElse(-1.0) * 1000;
+                double distance = closestTrash.isPresent() ? closestTrash.get().getTrashPin().getDistance(x, y) * 1000 : -1;
 
-                if(minDistanceDouble != -1 && minDistanceDouble <= currentUser.getMetersFromTrashToTriggerNotification())
+                if(distance > 0 && distance <= currentUser.getMetersFromTrashToTriggerNotification())
                 {
                     String channelId = "";
                     int priority = 0;
@@ -220,7 +222,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
                     new NotificationBuilder().sendNotificationOnChannel(
                             "Déchet à proximité",
-                            "Un déchet se trouve à " + (int) minDistanceDouble + "m de vous !",
+                            "Un déchet se trouve à " + (int) distance + "m de vous !",
                             channelId,
                             R.drawable.trash,
                             priority,

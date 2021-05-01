@@ -34,6 +34,7 @@ public class ProfileNotificationsActivity extends Activity
             @Override
             public void onClick(View v)
             {
+                setResult(1, new Intent());
                 finish();
             }
         });

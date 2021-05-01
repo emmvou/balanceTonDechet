@@ -156,6 +156,8 @@ public class SignalerFragment extends Fragment {
                 }
                 Log.v("json",object.toString());
 
+                Context currentContext = getContext();
+
                 new CountDownTimer(30000, 1000)
                 {
                     @Override
@@ -167,16 +169,13 @@ public class SignalerFragment extends Fragment {
                     @Override
                     public void onFinish()
                     {
-                        /*
                         new NotificationBuilder().sendNotificationOnChannel(
                                 "Déchet ramassé",
                                 "Une personne a ramassé le déchet que vous avez précédemment signalé !",
                                 NotificationManager.CHANNEL_2,
                                 R.drawable.trash,
                                 NotificationCompat.PRIORITY_DEFAULT,
-                                getContext());
-
-                         */
+                                currentContext);
                     }
                 }.start();
             }
