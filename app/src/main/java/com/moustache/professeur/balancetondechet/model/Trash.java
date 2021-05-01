@@ -1,6 +1,7 @@
 package com.moustache.professeur.balancetondechet.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,24 +20,28 @@ public class Trash implements Parcelable, Serializable {
     private String name;
     private String desc;
     private String userEmail;
+    private String imgPath;
     private boolean isPickedUp = false;
     private boolean isApproved = false;
 
     private static final String JSON_FILENAME = "trashes.json";
 
-    public Trash (String name, String desc, TrashPin trashPin){
+    public Trash (String name, String desc, TrashPin trashPin,String userEmail,String imgPath){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;
+        this.imgPath=imgPath;
+        this.userEmail=userEmail;
     }
 
-    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail){
+    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail, String imgPath){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;
         this.isApproved = isApproved;
         this.isPickedUp = isPickedUp;
         this.userEmail = userEmail;
+        this.imgPath = imgPath;
     }
 
     protected Trash(Parcel in) {
@@ -105,8 +110,9 @@ public class Trash implements Parcelable, Serializable {
         String userEmail = obj.getString("userEmail");
         boolean isPickedUp = obj.getBoolean("isPickedUp");
         boolean isApproved = obj.getBoolean("isApproved");
+        String imgPath = obj.getString("imgPath");
 
-        return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail);
+        return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail,imgPath);
     }
 
     @Override
@@ -119,9 +125,23 @@ public class Trash implements Parcelable, Serializable {
 
         dest.writeString(name);
         dest.writeString(desc);
+        dest.writeString(imgPath);
         dest.writeString(userEmail);
         dest.writeByte((byte) (isPickedUp ? 1 : 0));
         dest.writeByte((byte) (isApproved ? 1 : 0));
         dest.writeParcelable(trashPin, flags);
+    }
+
+    @Override
+    public String toString() {
+        return "Trash{" +
+                "trashPin=" + trashPin +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", imgPath='" + imgPath + '\'' +
+                ", isPickedUp=" + isPickedUp +
+                ", isApproved=" + isApproved +
+                '}';
     }
 }

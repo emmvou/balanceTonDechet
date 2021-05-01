@@ -62,6 +62,10 @@ public class MapFragment extends Fragment {
         if(bundle != null){
             selectedTrashes = bundle.getParcelable("trashList");
             trashes = bundle.getParcelableArrayList("trashes");
+
+            for (Trash t : trashes){
+                Log.v("trash test",t.toString());
+            }
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
             Log.v("PATH","there is at least one path to follow");
@@ -228,10 +232,6 @@ public class MapFragment extends Fragment {
         );
 
         map.getOverlays().add(mOverlay);
-    }
-
-    private List<Trash> parsePins() {
-        return Trash.parseMultipleFromJson(getContext());
     }
 
     private void updateUserPin() {

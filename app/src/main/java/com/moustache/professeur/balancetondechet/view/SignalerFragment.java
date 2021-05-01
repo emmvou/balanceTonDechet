@@ -30,6 +30,7 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.User;
+import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 import com.moustache.professeur.balancetondechet.persistance.SaveTrashes;
 
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class SignalerFragment extends Fragment {
     private EditText nomTextField;
     private EditText descTextfield;
     private ImageView imageView;
+    private Bitmap trashBitmap;
     private Button pictureButton;
     private Button reportButton;
     private static FileWriter fileWriter;
@@ -123,18 +125,26 @@ public class SignalerFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String imgPath = nomTextField.getText().toString().replace(" ","_")+trashes.size()+".png";
+                new ImageSaver(SignalerFragment.this.getContext()).
+                        setFileName(imgPath).
+                        setDirectoryName("images").
+                        save(trashBitmap);
+
                 TrashPin tp = new TrashPin(SignalerFragment.this.locationTrack.getLatitude(),SignalerFragment.this.locationTrack.getLongitude());
                 Log.v("DECHET",tp.toString());
-                Trash t = new Trash(nomTextField.getText().toString(),descTextfield.getText().toString(),tp);
-                Log.v("DECHET",t.getDesc()+" - "+t.getName()+ " - "+t.getTrashPin().toString());
+                Trash t = new Trash(nomTextField.getText().toString(),descTextfield.getText().toString(),tp,currentUser.getEmail(),imgPath);
+                Log.v("DECHET",t.toString());
                 JSONObject object = new JSONObject();
                 try {
                     object.put("name", nomTextField.getText().toString());
                     object.put("desc", descTextfield.getText().toString());
+                    object.put("userEmail",currentUser.getEmail());
                     object.put("isPickedUp", "false");
                     object.put("isApproved", "true");
                     object.put("x", tp.getX());
                     object.put("y", tp.getY());
+                    object.put("imgPath",imgPath);
                     trashes.add(t);
                     SaveTrashes.sauvegarderDechets(trashes,view.getContext());
                 } catch (JSONException | IOException e) {
@@ -151,8 +161,8 @@ public class SignalerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data.getExtras() != null){
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(bitmap);
+            this.trashBitmap = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(trashBitmap);
         }
     }
 
