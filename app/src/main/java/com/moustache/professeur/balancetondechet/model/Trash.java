@@ -84,4 +84,17 @@ public class Trash {
 
         return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Trash{" +
+                "trashPin=" + trashPin +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", isPickedUp=" + isPickedUp +
+                ", isApproved=" + isApproved +
+                '}';
+    }
 }

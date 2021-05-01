@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -24,7 +25,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
+import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.User;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +38,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private User currentUser;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private LocationTrack locationTrack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         this.configureDrawerLayout();
 
         this.configureNavigationView();
+
+        this.configureLocationtrack();
 
     }
 
@@ -133,6 +141,67 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void configureLocationtrack()
+    {
+        locationTrack = new LocationTrack(getApplicationContext());
+
+        locationTrack.setLocationChangedCallback(location ->
+        {
+            Log.d("MAIN ACTIVITY", "location updated !");
+
+            if(currentUser.getWantsToBeNotified() != 0)
+            {
+                ListTrash listTrash = new ListTrash(getApplicationContext());
+
+                final double[] minDistance = {-1};
+
+                listTrash.forEach(trash ->
+                {
+                    Log.d("TRASH", trash.toString());
+                    Log.d("TRASH", "distance: " + trash.getTrashPin().getDistance(location.getLatitude(), location.getLongitude())*1000 + "m");
+
+                    TrashPin trashPin = trash.getTrashPin();
+                    double distance = trashPin.getDistance(location.getLatitude(), location.getLongitude())*1000;
+
+                    if(minDistance[0] < 0 || distance < minDistance[0])
+                    {
+                        minDistance[0] = distance;
+                    }
+                });
+
+                if(minDistance[0] <= currentUser.getMetersFromTrashToTriggerNotification())
+                {
+                    String channelId = "";
+                    int priority = 0;
+
+                    switch(currentUser.getNotificationImportanceLevel())
+                    {
+                        case 0:
+                            channelId = NotificationManager.CHANNEL_1;
+                            priority = NotificationCompat.PRIORITY_LOW;
+                            break;
+                        case 1:
+                            channelId = NotificationManager.CHANNEL_2;
+                            priority = NotificationCompat.PRIORITY_DEFAULT;
+                            break;
+                        case 2:
+                            channelId = NotificationManager.CHANNEL_3;
+                            priority = NotificationCompat.PRIORITY_HIGH;
+                            break;
+                    }
+
+                    new NotificationBuilder().sendNotificationOnChannel(
+                            "Déchet à proximité",
+                            "Un déchet se trouve à " + ((int) minDistance[0]) + "m de vous !",
+                            channelId,
+                            R.drawable.trash,
+                            priority,
+                            getApplicationContext());
+                }
+            }
+        });
     }
 
     @Override
