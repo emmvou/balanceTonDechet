@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
 import org.json.JSONArray;
@@ -82,24 +83,11 @@ public class Trash implements Parcelable, Serializable {
     }
 
     public static List<Trash> parseMultipleFromJson(Context ctxt) {
-        String parsedPins = JsonParser.getJsonFromAssets(ctxt, JSON_FILENAME);
-
         try {
-            JSONArray rawTrashes = new JSONArray(parsedPins);
-            ArrayList<Trash> trashes = new ArrayList<>(rawTrashes.length());
-
-            for (int i = 0; i < rawTrashes.length(); i++) {
-                JSONObject trashElement = rawTrashes.getJSONObject(i);
-
-                Trash t = parseFromJson(trashElement);
-
-                trashes.add(t);
-            }
-
-            return trashes;
-        } catch (JSONException e) {
+            return LoadTrashes.chargerDechets(ctxt);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to parse json");
+            return null;
         }
     }
 
