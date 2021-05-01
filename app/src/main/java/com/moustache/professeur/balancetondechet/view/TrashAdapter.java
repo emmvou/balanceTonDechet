@@ -87,8 +87,8 @@ public class TrashAdapter extends BaseAdapter {
         layoutItem = (LinearLayout) (convertView == null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
         ((TextView) layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
         ((TextView) layoutItem.findViewById(R.id.desc)).setText(trashes.get(position).getDesc());
-        ((ImageView) layoutItem.findViewById(R.id.image)).setImageBitmap(new ImageSaver(layoutItem.getContext())
-                        .setFileName(trashes.get(position).getImgPath()).setDirectoryName("images").load());
+        //((ImageView) layoutItem.findViewById(R.id.image)).setImageBitmap(new ImageSaver(layoutItem.getContext())
+        //                .setFileName(trashes.get(position).getImgPath()).setDirectoryName("images").load());
 
 
         //todo ((ImageView) layoutItem.findViewById(R.id.image)).set(trashes.get(position).get());
