@@ -34,7 +34,7 @@ public class ProfileNotificationsActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                setResult(1, new Intent());
+                setResult(1, new Intent().putExtra("user", (Parcelable) currentUser));
                 finish();
             }
         });
