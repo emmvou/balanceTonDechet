@@ -81,22 +81,22 @@ public class ItineraireFragment extends Fragment {
             listTrash = new ListTrash(getContext());
         }
         catch (Exception e){
+
             listTrash = new ListTrash();
+            listView = view.findViewById(R.id.listView);
+            initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
+            ListTrash finalListTrash = listTrash;
+            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
+
             Button more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
-                PopupMenu popup = new PopupMenu(view.getContext(), v);
-                popup.setOnMenuItemClickListener(popListener);
-                popup.inflate(R.menu.menu_more);
-                popup.show();
+
             });
 
             return view;
         }
         listView = view.findViewById(R.id.listView);
         initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-        //TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
-        //listView.setAdapter(trashAdapter);
-        //trashAdapter.addListener(this);
         ListTrash finalListTrash = listTrash;
         locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
 
