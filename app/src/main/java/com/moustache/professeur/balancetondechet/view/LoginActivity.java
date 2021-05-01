@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (currentUser!=null){
             Log.v("Login","Connexion fructueuse : "+currentUser.getNom());
             Intent intentMainMenu = new Intent(this, MainMenuActivity.class);
-            intentMainMenu.putExtra("user",currentUser);
+            intentMainMenu.putExtra("user",(Parcelable)currentUser);
             startActivity(intentMainMenu);
         }
         else {
