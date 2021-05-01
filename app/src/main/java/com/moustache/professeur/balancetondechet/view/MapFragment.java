@@ -68,8 +68,8 @@ public class MapFragment extends Fragment {
             }
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
-            //if (selectedTrashes != null && selectedTrashes.size() > 0)
-            //    Log.v("PATH", "there is at least one path to follow");
+            if (selectedTrashes != null && selectedTrashes.size() > 0)
+                Log.v("PATH", "there is at least one path to follow");
         }
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
