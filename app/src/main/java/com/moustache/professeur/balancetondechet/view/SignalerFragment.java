@@ -141,6 +141,8 @@ public class SignalerFragment extends Fragment {
                 }
                 Log.v("json",object.toString());
 
+                Context currentContext = getContext();
+
                 new CountDownTimer(30000, 1000)
                 {
                     @Override
@@ -158,7 +160,7 @@ public class SignalerFragment extends Fragment {
                                 NotificationManager.CHANNEL_2,
                                 R.drawable.trash,
                                 NotificationCompat.PRIORITY_DEFAULT,
-                                getContext());
+                                currentContext);
                     }
                 }.start();
             }
