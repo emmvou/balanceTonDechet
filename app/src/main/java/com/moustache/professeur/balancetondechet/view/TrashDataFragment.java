@@ -15,6 +15,10 @@ import android.widget.Button;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TrashDataFragment#newInstance} factory method to
@@ -25,13 +29,12 @@ public class TrashDataFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     */
-    private static final String NAME_PARAM = "name";
     private Trash trash;
 
     private static final String TWITTER_LINK_BASE_URL = "https://mobile.twitter.com/home?status=";
-    private static final String MESSAGE_TEXT = "Super%20!%20Je%20viens%20de%20ramasser%20un%20déchet%20dans%20ma%20ville%20grace%20à%20Balance%20Ton%20Déchet.%20cc%20@balanceDechet\n";
+    private static final String MESSAGE_PT1 = "Super ! Je viens de ramasser un(e) ";
+    private static final String MESSAGE_PT2 = " dans ma ville grace à Balance Ton Déchet. cc @balanceDechet\n";
 
-    private String name;
     private Button tweetButton;
 
     public TrashDataFragment() {
@@ -49,8 +52,6 @@ public class TrashDataFragment extends Fragment {
     public static TrashDataFragment newInstance(String name) {
         TrashDataFragment fragment = new TrashDataFragment();
         Bundle args = new Bundle();
-
-        args.putString(NAME_PARAM, name);
 
         fragment.setArguments(args);
         return fragment;
@@ -76,7 +77,6 @@ public class TrashDataFragment extends Fragment {
         tweetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("hijkl", "mnop");
                 Intent twitterBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getTwitterLink()));
                 startActivity(twitterBrowserIntent);
             }
@@ -87,6 +87,18 @@ public class TrashDataFragment extends Fragment {
     }
 
     private String getTwitterLink() {
-        return new StringBuilder().append(TWITTER_LINK_BASE_URL).append(MESSAGE_TEXT).toString();
+        String fullMessage = new StringBuilder().append(MESSAGE_PT1).append(trash.getName()).append(MESSAGE_PT2).toString();
+        String urlEncodedString;
+
+        try {
+            urlEncodedString = URLEncoder.encode(fullMessage, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Unsupported encoding");
+        }
+
+        Log.d("TrashDataFragment", urlEncodedString);
+
+        return new StringBuilder().append(TWITTER_LINK_BASE_URL).append(urlEncodedString).toString();
     }
 }
