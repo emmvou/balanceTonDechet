@@ -11,21 +11,23 @@ public class User implements Parcelable, Serializable {
     private String email;
     private String nom;
     private String prenom;
+    private int admin = 0;
     private ArrayList<Trash> pickedUpTrashs = new ArrayList<Trash>();
 
     private int wantsToBeNotified;
     private int metersFromTrashToTriggerNotification;
     private int notificationImportanceLevel;
 
-    public User(String email, String nom, String prenom)
+    public User(String email, String nom, String prenom, boolean admin)
     {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
+        this.admin = (admin ? 1 : 0);
     }
 
-    public User(String email, String nom, String prenom, int wantsToBeNotified, int metersFromTrashToTriggerNotification, int notificationImportanceLevel){
-        this(email, nom, prenom);
+    public User(String email, String nom, String prenom, boolean admin, int wantsToBeNotified, int metersFromTrashToTriggerNotification, int notificationImportanceLevel){
+        this(email, nom, prenom, admin);
         this.wantsToBeNotified = wantsToBeNotified;
         this.metersFromTrashToTriggerNotification = metersFromTrashToTriggerNotification;
         this.notificationImportanceLevel = notificationImportanceLevel;
@@ -38,6 +40,7 @@ public class User implements Parcelable, Serializable {
         wantsToBeNotified = in.readInt();
         metersFromTrashToTriggerNotification = in.readInt();
         notificationImportanceLevel = in.readInt();
+        admin = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -88,6 +91,8 @@ public class User implements Parcelable, Serializable {
         this.notificationImportanceLevel = notificationImportanceLevel;
     }
 
+    public Boolean isAdmin() {return admin > 0;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -101,6 +106,7 @@ public class User implements Parcelable, Serializable {
         dest.writeInt(wantsToBeNotified);
         dest.writeInt(metersFromTrashToTriggerNotification);
         dest.writeInt(notificationImportanceLevel);
+        dest.writeInt(admin);
     }
 
     public void addTrash(Trash t){

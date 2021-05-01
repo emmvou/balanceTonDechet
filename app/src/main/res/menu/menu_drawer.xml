@@ -18,6 +18,13 @@
             android:id="@+id/drawer_notifs"
             android:icon="@drawable/gear"
             android:title="Paramètres" />
+
+        <item
+            android:id="@+id/drawer_admin"
+            android:icon="@drawable/ic_menu_offline"
+            android:title="Administrer"
+            android:visible="false" />
+
     </group>
 
 </menu>
