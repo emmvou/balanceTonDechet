@@ -242,7 +242,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 0)
+        if(requestCode == 0 && data != null)
         {
             User user = data.getExtras().getParcelable("user");
             currentUser = user;

@@ -77,4 +77,13 @@ public class ProfileNotificationsActivity extends Activity
             }
         });
     }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Intent intent = new Intent();
+        intent.putExtra("user", (Parcelable) currentUser);
+        setResult(1, intent);
+    }
 }
