@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.TrashDataFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/tweet_button"
@@ -17,7 +15,9 @@
             android:layout_marginTop="96dp"
             android:text="Tweet!" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/trash_image"
+            android:layout_width="300dp"
+            android:layout_height="200dp"/>
 
-
-</FrameLayout>
+</LinearLayout>

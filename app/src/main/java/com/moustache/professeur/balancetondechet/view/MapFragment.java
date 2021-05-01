@@ -222,7 +222,7 @@ public class MapFragment extends Fragment {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         Trash trash = trashes.get(index);
-
+                        Log.v("SELECTED TRASH",trash.toString());
                         Fragment nextFrag = new TrashDataFragment();
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("trash", trash);

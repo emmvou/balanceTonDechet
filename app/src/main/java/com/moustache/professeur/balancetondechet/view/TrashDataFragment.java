@@ -1,6 +1,7 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,7 @@ public class TrashDataFragment extends Fragment {
     */
     private static final String NAME_PARAM = "name";
     private Trash trash;
+    private ImageView trashImg;
 
     private static final String TWITTER_LINK_BASE_URL = "https://mobile.twitter.com/home?status=";
     private static final String MESSAGE_TEXT = "Super%20!%20Je%20viens%20de%20ramasser%20un%20déchet%20dans%20ma%20ville%20grace%20à%20Balance%20Ton%20Déchet.%20cc%20@balanceDechet\n";
@@ -72,6 +76,14 @@ public class TrashDataFragment extends Fragment {
             Log.v("SELECTED TRASH", trash.toString());
         }
 
+        trashImg = view.findViewById(R.id.trash_image);
+
+        Bitmap bitmap = new ImageSaver(view.getContext()).
+                setFileName(trash.getImgPath()).
+                setDirectoryName("images").
+                load();
+
+        trashImg.setImageBitmap(bitmap);
         tweetButton = view.findViewById(R.id.tweet_button);
         tweetButton.setOnClickListener(new View.OnClickListener() {
             @Override
