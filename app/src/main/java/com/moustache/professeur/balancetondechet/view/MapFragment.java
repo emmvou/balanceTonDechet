@@ -3,6 +3,7 @@ package com.moustache.professeur.balancetondechet.view;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -30,7 +35,9 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -43,7 +50,6 @@ import java.util.stream.Collectors;
 public class MapFragment extends Fragment {
     private MapView map;
     private IMapController mapController;
-    private ListTrash selectedTrashes;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
@@ -54,6 +60,11 @@ public class MapFragment extends Fragment {
 
     private ArrayList<Trash> trashes;
     private OverlayItem user;
+
+    //for path drawing
+    private ListTrash selectedTrashes;
+    RoadManager roadManager;
+    Road road;
 
     @Nullable
     @Override
@@ -68,7 +79,10 @@ public class MapFragment extends Fragment {
             }
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
-            Log.v("PATH","there is at least one path to follow");
+            if(selectedTrashes != null) {
+                roadManager = new OSRMRoadManager(this.getContext(), Configuration.getInstance().getUserAgentValue());
+                Log.v("PATH", "there is at least one path to follow");
+            }
         }
         View view = inflater.inflate(R.layout.fragment_map,container,false);
 
@@ -109,6 +123,27 @@ public class MapFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+
+        if(selectedTrashes != null){
+            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+            waypoints.add(new GeoPoint(locationTrack.getLatitude(), locationTrack.getLongitude()));
+            GeoPoint endPoint = new GeoPoint(selectedTrashes.get(0).getTrashPin().getLatitude(), selectedTrashes.get(0).getTrashPin().getLongitude());
+            waypoints.add(endPoint);
+            ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_CAR);
+            road = roadManager.getRoad(waypoints);
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            //map.invalidate();
+            Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+            for (int i=0; i<road.mNodes.size(); i++){
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(map);
+                nodeMarker.setPosition(node.mLocation);
+                nodeMarker.setIcon(nodeIcon);
+                nodeMarker.setTitle("Step "+i);
+                map.getOverlays().add(nodeMarker);
+            }
+        }
 
         return view;
     }

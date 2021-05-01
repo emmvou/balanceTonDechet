@@ -19,7 +19,7 @@ public class TrashPin implements Parcelable, Serializable {
 
     public TrashPin(double x, double y) {
         this.x = x;
-        this.y= y;
+        this.y = y;
     }
 
     protected TrashPin(Parcel in) {
@@ -40,20 +40,20 @@ public class TrashPin implements Parcelable, Serializable {
     };
 
     //formula : https://www.movable-type.co.uk/scripts/latlong.html
-    public double getDistance(double dx, double dy){
+    public double getDistance(double dx, double dy) {
         double lat1 = x;
         double long1 = y;
         //return Math.sqrt(Distance.getSquaredDistanceToPoint(this.x, this.y, x, y));
         double R = 6371000;
-        double phi1 = lat1*Math.PI/180;
-        double phi2 = dx*Math.PI/180;
-        double deltaphi = (dx-lat1)*Math.PI/180;
-        double deltalambda = (dy - long1)*Math.PI/180;
-        double a = Math.sin(deltaphi/2)*Math.sin(deltaphi/2)+Math.cos(phi1)*Math.cos(phi2)*Math.sin(deltalambda/2)*Math.sin(deltalambda/2);
-        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R*c; //m
-        Log.v("DISTANCE", "distance between {"+this.x+":"+this.y+"} et {"+dx+":"+dy+"} : "+String.valueOf(d)+"m");
-        return d/1000; //km
+        double phi1 = lat1 * Math.PI / 180;
+        double phi2 = dx * Math.PI / 180;
+        double deltaphi = (dx - lat1) * Math.PI / 180;
+        double deltalambda = (dy - long1) * Math.PI / 180;
+        double a = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = R * c; //m
+        Log.v("DISTANCE", "distance between {" + this.x + ":" + this.y + "} et {" + dx + ":" + dy + "} : " + String.valueOf(d) + "m");
+        return d / 1000; //km
     }
 
     public TrashPin(JSONObject obj) throws JSONException {
@@ -82,7 +82,15 @@ public class TrashPin implements Parcelable, Serializable {
         return x;
     }
 
+    public double getLatitude() {
+        return x;
+    }
+
     public double getY() {
+        return y;
+    }
+
+    public double getLongitude() {
         return y;
     }
 
@@ -96,4 +104,5 @@ public class TrashPin implements Parcelable, Serializable {
         dest.writeDouble(x);
         dest.writeDouble(y);
     }
+
 }
