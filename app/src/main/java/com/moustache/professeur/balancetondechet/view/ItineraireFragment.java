@@ -81,7 +81,6 @@ public class ItineraireFragment extends Fragment {
             listTrash = new ListTrash(getContext());
         }
         catch (Exception e){
-            listTrash = new ListTrash();
             Button more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(view.getContext(), v);
