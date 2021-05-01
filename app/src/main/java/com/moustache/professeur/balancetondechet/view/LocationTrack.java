@@ -19,6 +19,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.TrashPin;
+
+import org.json.JSONException;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 

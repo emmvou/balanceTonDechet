@@ -13,6 +13,11 @@
             android:id="@+id/drawer_logout"
             android:icon="@drawable/ic_menu_offline"
             android:title="Se déconnecter" />
+
+        <item
+            android:id="@+id/drawer_notifs"
+            android:icon="@drawable/gear"
+            android:title="Paramètres" />
     </group>
 
 </menu>
