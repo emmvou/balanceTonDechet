@@ -77,6 +77,7 @@ public class TrashDataFragment extends Fragment {
             Log.v("SELECTED TRASH", trash.toString());
         }
 
+
         trashImg = view.findViewById(R.id.trash_image);
 
         Bitmap bitmap = new ImageSaver(view.getContext()).

@@ -48,6 +48,7 @@ public class Trash implements Parcelable, Serializable {
     protected Trash(Parcel in) {
         name = in.readString();
         desc = in.readString();
+        imgPath = in.readString();
         userEmail = in.readString();
         isPickedUp = in.readByte() != 0;
         isApproved = in.readByte() != 0;

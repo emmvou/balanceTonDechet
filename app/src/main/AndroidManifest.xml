@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".NotificationManager"
@@ -17,12 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BalanceTonDechet">
-
+        <activity
+            android:name=".view.TrashDataActivity"
+            android:label="@string/title_activity_trash_data"
+            android:theme="@style/Theme.BalanceTonDechet.NoActionBar"></activity>
         <activity
             android:name=".view.ProfileActivity"
-            android:parentActivityName=".view.MainMenuActivity">
-        </activity>
-
+            android:parentActivityName=".view.MainMenuActivity"></activity>
         <activity android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.MainMenuActivity"
             android:label="Menu principal"
@@ -39,12 +39,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.LoginActivity" />
         </activity>
-
         <activity
             android:name=".view.ProfileNotificationsActivity"
-            android:parentActivityName=".view.MainMenuActivity" >
-        </activity>
-
+            android:parentActivityName=".view.MainMenuActivity"></activity>
     </application>
 
 </manifest>

@@ -2,10 +2,12 @@ package com.moustache.professeur.balancetondechet.view;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -216,6 +218,9 @@ public class MapFragment extends Fragment {
 
         mapController.setCenter(user.getPoint());
 
+        // This is needed for the onClickListener event below
+        MapFragment self = this;
+
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
                 getContext(),
                 pins,
@@ -228,12 +233,11 @@ public class MapFragment extends Fragment {
                         }
 
                         Trash trash = trashes.get(index);
-                        Log.v("SELECTED TRASH",trash.toString());
-                        Fragment nextFrag = new TrashDataFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("trash", trash);
-                        nextFrag.setArguments(bundle);
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, nextFrag).commit();
+
+                        Intent trashDataIntent = new Intent(getContext(), TrashDataActivity.class);
+                        trashDataIntent.putExtra("trash", (Parcelable) trash);
+                        startActivity(trashDataIntent);
+
                         return false;
                     }
 
