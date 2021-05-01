@@ -15,7 +15,7 @@
             android:title="Se déconnecter" />
         <item
             android:id="@+id/drawer_admin"
-            android:icon="@drawable/ic_menu_offline"
+            android:icon="@drawable/ic_baseline_build_24"
             android:title="Administrer"
             android:visible="false" />
     </group>
