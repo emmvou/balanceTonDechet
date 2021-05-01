@@ -76,14 +76,29 @@ public class ItineraireFragment extends Fragment {
         }else{
             locationTrack.showSettingsAlert();
         }
+        ListTrash listTrash;
+        try{
+            listTrash = new ListTrash(getContext());
+        }
+        catch (Exception e){
 
-        ListTrash listTrash = new ListTrash(getContext());
+            listTrash = new ListTrash();
+            listView = view.findViewById(R.id.listView);
+            initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
+            ListTrash finalListTrash = listTrash;
+            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
+
+            Button more = view.findViewById(R.id.more);
+            more.setOnClickListener(v -> {
+
+            });
+
+            return view;
+        }
         listView = view.findViewById(R.id.listView);
         initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-        //TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
-        //listView.setAdapter(trashAdapter);
-        //trashAdapter.addListener(this);
-        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), listTrash, loc.getLatitude(), loc.getLongitude())));
+        ListTrash finalListTrash = listTrash;
+        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
 
         Button more = view.findViewById(R.id.more);
         more.setOnClickListener(v -> {
@@ -185,7 +200,8 @@ public class ItineraireFragment extends Fragment {
                 case R.id.reachall:
                     //là on active la carte
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("trashList", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes());
+                    bundle.putParcelableArrayList("trashList", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes().getArrayList());
+                    bundle.putParcelableArrayList("trashes", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes().getArrayList());
                     Fragment fragment = new MapFragment();
                     fragment.setArguments(bundle);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit();
@@ -257,7 +273,14 @@ public class ItineraireFragment extends Fragment {
 
     private void updateTrashList(){
         listView.setAdapter(null);
-        listView.setAdapter(new TrashAdapter(getContext(), new ListTrash(getContext()), locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
+        ListTrash listTrash;
+        try{
+            listTrash = new ListTrash(getContext());
+        }
+        catch (Exception e){
+            return;
+        }
+            listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
     }
 
     @Override

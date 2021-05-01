@@ -59,18 +59,19 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             selectedTrashes = bundle.getParcelable("trashList");
             trashes = bundle.getParcelableArrayList("trashes");
 
-            for (Trash t : trashes){
-                Log.v("trash test",t.toString());
+            for (Trash t : trashes) {
+                Log.v("trash test", t.toString());
             }
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
-            Log.v("PATH","there is at least one path to follow");
+            if (selectedTrashes != null && selectedTrashes.size() > 0)
+                Log.v("PATH", "there is at least one path to follow");
         }
-        View view = inflater.inflate(R.layout.fragment_map,container,false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         Configuration.getInstance().load(
                 view.getContext(),
@@ -85,14 +86,14 @@ public class MapFragment extends Fragment {
 
 
             if (permissionsToRequest.size() > 0)
-                requestPermissions((String[])permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
 
         locationTrack = new LocationTrack(view.getContext());
 
-        if(locationTrack.canGetLocation()){
+        if (locationTrack.canGetLocation()) {
 
-        }else{
+        } else {
             locationTrack.showSettingsAlert();
         }
 
@@ -221,6 +222,11 @@ public class MapFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        if (index == trashes.size()) {
+                            // Have we clicked on the user-position pin?
+                            return false;
+                        }
+
                         Trash trash = trashes.get(index);
                         Log.v("SELECTED TRASH",trash.toString());
                         Fragment nextFrag = new TrashDataFragment();

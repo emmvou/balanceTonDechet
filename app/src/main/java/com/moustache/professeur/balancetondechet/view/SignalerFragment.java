@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +23,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.User;
@@ -134,7 +138,7 @@ public class SignalerFragment extends Fragment {
                 TrashPin tp = new TrashPin(SignalerFragment.this.locationTrack.getLatitude(),SignalerFragment.this.locationTrack.getLongitude());
                 Log.v("DECHET",tp.toString());
                 Trash t = new Trash(nomTextField.getText().toString(),descTextfield.getText().toString(),tp,currentUser.getEmail(),imgPath);
-                Log.v("DECHET",t.toString());
+                Log.v("DECHET", t.toString());
                 JSONObject object = new JSONObject();
                 try {
                     object.put("name", nomTextField.getText().toString());
@@ -150,9 +154,32 @@ public class SignalerFragment extends Fragment {
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
+                Log.v("json",object.toString());
+
+                Context currentContext = getContext();
+
+                new CountDownTimer(30000, 1000)
+                {
+                    @Override
+                    public void onTick(long millisUntilFinished)
+                    {
+                        Log.d("timer", millisUntilFinished / 1000 + " seconds remaining !");
+                    }
+
+                    @Override
+                    public void onFinish()
+                    {
+                        new NotificationBuilder().sendNotificationOnChannel(
+                                "Déchet ramassé",
+                                "Une personne a ramassé le déchet que vous avez précédemment signalé !",
+                                NotificationManager.CHANNEL_2,
+                                R.drawable.trash,
+                                NotificationCompat.PRIORITY_DEFAULT,
+                                currentContext);
+                    }
+                }.start();
             }
         });
-
 
         return view;
     }

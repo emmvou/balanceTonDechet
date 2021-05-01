@@ -5,32 +5,30 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,6 +37,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ArrayList<Trash> trashes = new ArrayList<Trash>();
+    private LocationTrack locationTrack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +54,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         }
 
         for (Trash t : trashes){
-            Log.v("LIST",t.toString());
+            Log.v("LIST", t.toString());
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("trashes",MainMenuActivity.this.trashes);
@@ -72,6 +72,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         this.configureDrawerLayout();
 
         this.configureNavigationView();
+
+        this.configureLocationtrack();
 
     }
 
@@ -128,6 +130,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 intentProfile.putExtra("user",(Parcelable)currentUser);
                 startActivity(intentProfile);
                 break;
+            case R.id.drawer_notifs:
+                Intent intent = new Intent(getApplicationContext(), ProfileNotificationsActivity.class);
+                intent.putExtra("user", (Parcelable) currentUser);
+                startActivityForResult(intent, 0);
             default:
                 break;
         }
@@ -154,6 +160,92 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if(currentUser.isAdmin()){
+            navigationView.getMenu().getItem(3).setVisible(true);
+        }
     }
 
+    private void configureLocationtrack()
+    {
+        locationTrack = new LocationTrack(getApplicationContext());
+
+        locationTrack.setLocationChangedCallback(location ->
+        {
+            Log.d("MAIN ACTIVITY", "location updated !");
+
+            if(currentUser.getWantsToBeNotified() != 0)
+            {
+                double x = location.getLatitude();
+                double y = location.getLongitude();
+                ListTrash listTrash = new ListTrash();
+
+                try
+                {
+                    listTrash = new ListTrash(getApplicationContext());
+                }
+                catch (IOException | ClassNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+
+                Optional<Trash> closestTrash = listTrash.stream().min( (trash1, trash2) ->
+                {
+                    double d1 = trash1.getTrashPin().getDistance(x, y);
+                    double d2 = trash2.getTrashPin().getDistance(x, y);
+                    return Double.compare(d1, d2);
+                });
+
+                double distance = closestTrash.isPresent() ? closestTrash.get().getTrashPin().getDistance(x, y) * 1000 : -1;
+
+                if(distance > 0 && distance <= currentUser.getMetersFromTrashToTriggerNotification())
+                {
+                    String channelId = "";
+                    int priority = 0;
+
+                    switch(currentUser.getNotificationImportanceLevel())
+                    {
+                        case 0:
+                            channelId = NotificationManager.CHANNEL_1;
+                            priority = NotificationCompat.PRIORITY_LOW;
+                            break;
+                        case 1:
+                            channelId = NotificationManager.CHANNEL_2;
+                            priority = NotificationCompat.PRIORITY_DEFAULT;
+                            break;
+                        case 2:
+                            channelId = NotificationManager.CHANNEL_3;
+                            priority = NotificationCompat.PRIORITY_HIGH;
+                            break;
+                    }
+
+                    new NotificationBuilder().sendNotificationOnChannel(
+                            "Déchet à proximité",
+                            "Un déchet se trouve à " + (int) distance + "m de vous !",
+                            channelId,
+                            R.drawable.trash,
+                            priority,
+                            getApplicationContext());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.d("user in main activity", currentUser.toString());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 0 && data != null)
+        {
+            User user = data.getExtras().getParcelable("user");
+            currentUser = user;
+        }
+    }
 }
