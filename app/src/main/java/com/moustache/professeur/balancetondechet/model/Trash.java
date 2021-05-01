@@ -132,4 +132,8 @@ public class Trash implements Parcelable, Serializable {
                 ", isApproved=" + isApproved +
                 '}';
     }
+
+    public String getImgPath() {
+        return imgPath;
+    }
 }

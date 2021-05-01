@@ -161,7 +161,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         this.navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(currentUser.isAdmin()){
-            navigationView.getMenu().getItem(2).setVisible(true);
+            navigationView.getMenu().getItem(3).setVisible(true);
         }
     }
 
