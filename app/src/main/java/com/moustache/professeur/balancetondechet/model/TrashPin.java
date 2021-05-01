@@ -82,9 +82,13 @@ public class TrashPin implements Parcelable, Serializable {
         return x;
     }
 
+    public double getLatitude(){return x;}
+
     public double getY() {
         return y;
     }
+
+    public double getLongitude(){return y;}
 
     @Override
     public int describeContents() {
