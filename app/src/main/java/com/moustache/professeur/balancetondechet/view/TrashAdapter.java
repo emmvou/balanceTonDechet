@@ -1,7 +1,10 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.util.Log;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewDebug;
@@ -9,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ITrashAdapterListener;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 import com.moustache.professeur.balancetondechet.utils.Pair;
 
 import java.util.Arrays;
@@ -38,7 +43,7 @@ public class TrashAdapter extends BaseAdapter {
         location = Pair.of(x, y);
         mChecked = new Boolean[trashes.size()];
         distance = new double[trashes.size()];
-        for(int i = 0; i < trashes.size(); i++){
+        for (int i = 0; i < trashes.size(); i++) {
             distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
         }
         Arrays.fill(mChecked, true);
@@ -49,15 +54,14 @@ public class TrashAdapter extends BaseAdapter {
         this.inflater = LayoutInflater.from(ctx);
         location = Pair.of(x, y);
         distance = new double[trashes.size()];
-        for(int i = 0; i < trashes.size(); i++){
+        for (int i = 0; i < trashes.size(); i++) {
             distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
         }
-        if(filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE){
+        if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
 
-        mChecked = new Boolean[trashes.size()];
-        Arrays.fill(mChecked, true);
-        }
-        else{
+            mChecked = new Boolean[trashes.size()];
+            Arrays.fill(mChecked, true);
+        } else {
             applyDistFilter(filter.getDistance());
         }
     }
@@ -82,6 +86,12 @@ public class TrashAdapter extends BaseAdapter {
         LinearLayout layoutItem;
         layoutItem = (LinearLayout) (convertView == null ? inflater.inflate(R.layout.adapter_item, parent, false) : convertView);
         ((TextView) layoutItem.findViewById(R.id.trashName)).setText(trashes.get(position).getName());
+        ((TextView) layoutItem.findViewById(R.id.desc)).setText(trashes.get(position).getDesc());
+        ((ImageView) layoutItem.findViewById(R.id.image)).setImageBitmap(new ImageSaver(layoutItem.getContext())
+                        .setFileName(trashes.get(position).getImgPath()).setDirectoryName("images").load());
+
+
+        //todo ((ImageView) layoutItem.findViewById(R.id.image)).set(trashes.get(position).get());
         ((TextView) layoutItem.findViewById(R.id.distance)).setText(String.format(Locale.FRANCE, "%1.1f km",
                 trashes.get(position).getTrashPin().getDistance(location.getFirst(), location.getSecond())));
         if (convertView == null) {
@@ -94,15 +104,25 @@ public class TrashAdapter extends BaseAdapter {
         cBox.setChecked(mChecked[position]);
         cBox.setOnCheckedChangeListener(mListener);
 
+        layoutItem.setOnClickListener(cListener);
+
         //layoutItem.findViewById(R.id.toPick).setOnClickListener(click -> {
         //    listener.onClickTrash(trashes.get(position), true);
         //});
         return layoutItem;
     }
 
-    //public void addListener(ITrashAdapterListener listener){
-    //    this.listener = listener;
-    //}
+    View.OnClickListener cListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            LinearLayout l = (LinearLayout) v.findViewById(R.id.grower);
+            if (l.getVisibility() == View.GONE) {
+                l.setVisibility(View.VISIBLE);
+            } else {
+                l.setVisibility(View.GONE);
+            }
+        }
+    };
 
     CompoundButton.OnCheckedChangeListener mListener = new CompoundButton.OnCheckedChangeListener() {
 
@@ -121,11 +141,11 @@ public class TrashAdapter extends BaseAdapter {
         return trashes.stream().filter(t -> mChecked[trashes.indexOf(t)]).collect(Collectors.toCollection(ListTrash::new));
     }
 
-    public void applyDistFilter(double dist){
+    public void applyDistFilter(double dist) {
         trashes = trashes.stream().filter(t -> distance[trashes.indexOf(t)] < dist).collect(Collectors.toCollection(ListTrash::new));
         mChecked = new Boolean[trashes.size()];
         distance = new double[trashes.size()];
-        for(int i = 0; i < trashes.size(); i++){
+        for (int i = 0; i < trashes.size(); i++) {
             distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
         }
         Arrays.fill(mChecked, true);

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -107,6 +108,18 @@ public class ItineraireFragment extends Fragment {
             popup.inflate(R.menu.menu_more);
             popup.show();
         });
+
+        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        //    @Override
+        //    public void onItemClick(AdapterView<?>adapter,View v, int position, long id){
+        //        TrashAdapter item = (TrashAdapter) adapter.getItemAtPosition(position);
+        //        item.getView();
+        //        //todo toggle le visible
+        //        //Intent intent = new Intent(Activity.this,destinationActivity.class);
+        //        ////based on item add info to intent
+        //        //startActivity(intent);
+        //    }
+        //});
 
         return view;
     }
