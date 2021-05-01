@@ -44,6 +44,7 @@
             android:name=".view.ProfileNotificationsActivity"
             android:parentActivityName=".view.MainMenuActivity" >
         </activity>
+
     </application>
 
 </manifest>
