@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.Trash;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +26,7 @@ public class TrashDataFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     */
     private static final String NAME_PARAM = "name";
+    private Trash trash;
 
     private static final String TWITTER_LINK_BASE_URL = "https://mobile.twitter.com/home?status=";
     private static final String MESSAGE_TEXT = "Super%20!%20Je%20viens%20de%20ramasser%20un%20déchet%20dans%20ma%20ville%20grace%20à%20Balance%20Ton%20Déchet.%20cc%20@balanceDechet\n";
@@ -66,7 +68,8 @@ public class TrashDataFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trash_data, container, false);
 
         if (getArguments() != null) {
-            name = getArguments().getString(NAME_PARAM);
+            trash = getArguments().getParcelable("trash");
+            Log.v("SELECTED TRASH", trash.toString());
         }
 
         tweetButton = view.findViewById(R.id.tweet_button);
