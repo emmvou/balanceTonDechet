@@ -221,6 +221,11 @@ public class MapFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        if (index == trashes.size()) {
+                            // Have we clicked on the user-position pin?
+                            return false;
+                        }
+
                         Trash trash = trashes.get(index);
 
                         Fragment nextFrag = new TrashDataFragment();
