@@ -20,6 +20,10 @@ public class ListTrash extends ArrayList<Trash> implements Parcelable {
         addAll(lst);
     }
 
+    public ListTrash(ArrayList<Trash> lst){
+        addAll(lst);
+    }
+
     public ListTrash(){}
 
     protected ListTrash(Parcel in) {

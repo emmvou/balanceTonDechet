@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 
 import java.util.ArrayList;
@@ -76,12 +77,12 @@ public class ItineraireFragment extends Fragment {
         }else{
             locationTrack.showSettingsAlert();
         }
-        ListTrash listTrash;
+        ArrayList<Trash> listTrash;
         try{
-            listTrash = new ListTrash(getContext());
+            listTrash = new ListTrash(getContext()).getArrayList();
         }
         catch (Exception e){
-            listTrash = new ListTrash();
+            listTrash = new ListTrash().getArrayList();
             Button more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(view.getContext(), v);
@@ -97,7 +98,7 @@ public class ItineraireFragment extends Fragment {
         //TrashAdapter trashAdapter = new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude());
         //listView.setAdapter(trashAdapter);
         //trashAdapter.addListener(this);
-        ListTrash finalListTrash = listTrash;
+        ArrayList<Trash> finalListTrash = listTrash;
         locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
 
         Button more = view.findViewById(R.id.more);

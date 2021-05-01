@@ -19,6 +19,7 @@ import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.utils.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -44,6 +45,18 @@ public class TrashAdapter extends BaseAdapter {
         Arrays.fill(mChecked, true);
     }
 
+    public TrashAdapter(Context ctx, ArrayList<Trash> listTrash, double x, double y) {
+        this.trashes = new ListTrash(listTrash);
+        this.inflater = LayoutInflater.from(ctx);
+        location = Pair.of(x, y);
+        mChecked = new Boolean[trashes.size()];
+        distance = new double[trashes.size()];
+        for(int i = 0; i < trashes.size(); i++){
+            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
+        }
+        Arrays.fill(mChecked, true);
+    }
+
     public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
         this.trashes = listTrash;
         this.inflater = LayoutInflater.from(ctx);
@@ -56,6 +69,24 @@ public class TrashAdapter extends BaseAdapter {
 
         mChecked = new Boolean[trashes.size()];
         Arrays.fill(mChecked, true);
+        }
+        else{
+            applyDistFilter(filter.getDistance());
+        }
+    }
+
+    public TrashAdapter(Context ctx, ArrayList<Trash> listTrash, double x, double y, Filter filter) {
+        this.trashes = new ListTrash(listTrash);
+        this.inflater = LayoutInflater.from(ctx);
+        location = Pair.of(x, y);
+        distance = new double[trashes.size()];
+        for(int i = 0; i < trashes.size(); i++){
+            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
+        }
+        if(filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE){
+
+            mChecked = new Boolean[trashes.size()];
+            Arrays.fill(mChecked, true);
         }
         else{
             applyDistFilter(filter.getDistance());
