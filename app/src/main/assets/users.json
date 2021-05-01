@@ -4,13 +4,15 @@
       "email": "test@gmail.com",
       "mdp": "azerty",
       "nom": "Pierre-Jean",
-      "prenom": "Chalençon"
+      "prenom": "Chalençon",
+      "admin": false
     },
     {
       "email": "admin@gmail.com",
       "mdp": "123az",
       "nom": "Ad",
-      "prenom": "Min"
+      "prenom": "Min",
+      "admin": true
     }
   ]
 }

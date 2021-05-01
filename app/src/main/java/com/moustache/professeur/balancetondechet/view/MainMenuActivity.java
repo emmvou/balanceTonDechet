@@ -61,6 +61,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
+
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("trashes",MainMenuActivity.this.trashes);
         Fragment initFragment = new MapFragment();
@@ -154,6 +155,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if(currentUser.isAdmin()){
+            navigationView.getMenu().getItem(2).setVisible(true);
+        }
     }
 
 }

@@ -11,6 +11,7 @@ public class User implements Parcelable, Serializable {
     private String email;
     private String nom;
     private String prenom;
+    private int admin = 0;
     private ArrayList<Trash> pickedUpTrashs = new ArrayList<Trash>();
 
     public User(String email, String nom, String prenom){
@@ -19,10 +20,18 @@ public class User implements Parcelable, Serializable {
         this.prenom = prenom;
     }
 
+    public User(String email, String nom, String prenom, Boolean admin){
+        this.email = email;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.admin = (admin? 1 : 0);
+    }
+
     protected User(Parcel in) {
         email = in.readString();
         nom = in.readString();
         prenom = in.readString();
+        admin = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -49,6 +58,8 @@ public class User implements Parcelable, Serializable {
         return prenom;
     }
 
+    public Boolean isAdmin() {return admin > 0;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -59,6 +70,7 @@ public class User implements Parcelable, Serializable {
         dest.writeString(email);
         dest.writeString(nom);
         dest.writeString(prenom);
+        dest.writeInt(admin);
     }
 
     public void addTrash(Trash t){

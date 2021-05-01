@@ -41,7 +41,8 @@ public class UserController {
                 if ((emailTextField.compareTo(email_value) == 0) && (mdpTextField.compareTo(mdp_value) == 0 )){
                     String nom_value = jo_inside.getString("nom");
                     String prenom_value = jo_inside.getString("prenom");
-                    User currentUser = new User(email_value,nom_value,prenom_value);
+                    String admin_value = jo_inside.getString("admin");
+                    User currentUser = new User(email_value,nom_value,prenom_value, Boolean.valueOf(admin_value));
                     return currentUser;
                 }
             }
