@@ -50,22 +50,25 @@ public class TrashDataActivity extends AppCompatActivity {
 
         trashImg.setImageBitmap(bitmap);
 
-        Button tweetButton = findViewById(R.id.tweet_button);
+        setButton(R.id.tweet_button, v -> {
+            Intent twitterBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getTwitterLink()));
+            startActivity(twitterBrowserIntent);
+        });
 
-        Log.v("TrashDataActivity", "Button is : " + (tweetButton == null ? "null": "not null"));
+        TrashDataActivity self = this;
 
-        tweetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent twitterBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getTwitterLink()));
-                startActivity(twitterBrowserIntent);
-            }
+        setButton(R.id.backbutton, v -> {
+            self.finish();
         });
     }
 
     void setTextView(int id, String content) {
         TextView textView = findViewById(id);
         textView.setText(content);
+    }
+
+    void setButton(int id, View.OnClickListener action) {
+        findViewById(id).setOnClickListener(action);
     }
 
     private String getTwitterLink() {
