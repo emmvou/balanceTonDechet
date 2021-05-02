@@ -1,13 +1,9 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.util.Log;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -24,8 +20,13 @@ import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 import com.moustache.professeur.balancetondechet.utils.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TrashAdapter extends BaseAdapter {
@@ -35,30 +36,30 @@ public class TrashAdapter extends BaseAdapter {
     private ITrashAdapterListener listener;
     private Pair<Double, Double> location;
     private Boolean[] mChecked;
-    private double[] distance;
+    private Map<Trash, Double> trashesDist;
 
     public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y) {
         this.trashes = listTrash;
         this.inflater = LayoutInflater.from(ctx);
         location = Pair.of(x, y);
         mChecked = new Boolean[trashes.size()];
-        distance = new double[trashes.size()];
-        for (int i = 0; i < trashes.size(); i++) {
-            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
-        }
+        computeDistances();
+
+
         Arrays.fill(mChecked, true);
     }
 
-    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
-        this.trashes = listTrash;
-        this.inflater = LayoutInflater.from(ctx);
-        location = Pair.of(x, y);
-        distance = new double[trashes.size()];
-        for (int i = 0; i < trashes.size(); i++) {
-            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
-        }
-        if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
+    private void computeDistances() {
+        trashesDist = trashes.stream().collect(Collectors.toMap(
+                t -> t,
+                t -> t.getTrashPin().getDistance(location.getFirst(), location.getSecond())
+        ));
+        this.trashes.sort(Comparator.comparing(item -> trashesDist.get(item)));
+    }
 
+    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
+        this(ctx, listTrash, x, y);
+        if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
             mChecked = new Boolean[trashes.size()];
             Arrays.fill(mChecked, true);
         } else {
@@ -106,9 +107,6 @@ public class TrashAdapter extends BaseAdapter {
 
         layoutItem.setOnClickListener(cListener);
 
-        //layoutItem.findViewById(R.id.toPick).setOnClickListener(click -> {
-        //    listener.onClickTrash(trashes.get(position), true);
-        //});
         return layoutItem;
     }
 
@@ -142,13 +140,10 @@ public class TrashAdapter extends BaseAdapter {
     }
 
     public void applyDistFilter(double dist) {
-        trashes = trashes.stream().filter(t -> distance[trashes.indexOf(t)] < dist).collect(Collectors.toCollection(ListTrash::new));
+        trashes = trashes.stream().filter(t -> this.trashesDist.get(t) < dist).collect(Collectors.toCollection(ListTrash::new));
         mChecked = new Boolean[trashes.size()];
-        distance = new double[trashes.size()];
-        for (int i = 0; i < trashes.size(); i++) {
-            distance[i] = trashes.get(i).getTrashPin().getDistance(location.getFirst(), location.getSecond());
-        }
         Arrays.fill(mChecked, true);
+        computeDistances();
         Log.v("FILTER", trashes.toString());
     }
 
