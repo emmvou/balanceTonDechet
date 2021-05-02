@@ -53,8 +53,8 @@ public class ItineraireFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_itineraire,container,false);
-        if(filter != null){
+        View view = inflater.inflate(R.layout.fragment_itineraire, container, false);
+        if (filter != null) {
             Log.v("FILTER", String.valueOf(filter.getDistance()));
         }
 
@@ -66,21 +66,20 @@ public class ItineraireFragment extends Fragment {
 
 
             if (permissionsToRequest.size() > 0)
-                requestPermissions((String[])permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
 
         locationTrack = new LocationTrack(view.getContext());
 
-        if(locationTrack.canGetLocation()){
+        if (locationTrack.canGetLocation()) {
 
-        }else{
+        } else {
             locationTrack.showSettingsAlert();
         }
         ListTrash listTrash;
-        try{
+        try {
             listTrash = new ListTrash(getContext());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
             listTrash = new ListTrash();
             listView = view.findViewById(R.id.listView);
@@ -183,7 +182,7 @@ public class ItineraireFragment extends Fragment {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
-    private void initAdapter(ListView listView, TrashAdapter trashAdapter){
+    private void initAdapter(ListView listView, TrashAdapter trashAdapter) {
         listView.setAdapter(trashAdapter);
     }
 
@@ -191,7 +190,7 @@ public class ItineraireFragment extends Fragment {
     PopupMenu.OnMenuItemClickListener popListener = new PopupMenu.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            switch(item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.filter:
                     //alors là on appelle la page pour appliquer les filtres
                     filters();
@@ -200,23 +199,23 @@ public class ItineraireFragment extends Fragment {
                 case R.id.reachall:
                     //là on active la carte
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("trashList", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes().getArrayList());
-                    bundle.putParcelableArrayList("trashes", ((TrashAdapter)listView.getAdapter()).getCheckedTrashes().getArrayList());
+                    bundle.putParcelableArrayList("trashList", ((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
+                    bundle.putParcelableArrayList("trashes", ((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
                     Fragment fragment = new MapFragment();
                     fragment.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit();
-                    if(filter != null){
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    if (filter != null) {
                         Log.v("FILTER", String.valueOf(filter.getDistance()));
                     }
                     return true;
                 case R.id.export:
                     //et là on copie les positions vers le presse-papier
-                    ListTrash trashes =  ((TrashAdapter)listView.getAdapter()).getCheckedTrashes();
+                    ListTrash trashes = ((TrashAdapter) listView.getAdapter()).getCheckedTrashes();
                     StringBuilder data = new StringBuilder();
                     data.append("Latitude,Longitude");
-                    for(int i = 0; i < trashes.size(); i++){
+                    for (int i = 0; i < trashes.size(); i++) {
                         TrashPin t = trashes.get(i).getTrashPin();
-                        data.append("\n"+ t.getX() +","+t.getY());
+                        data.append("\n" + t.getX() + "," + t.getY());
                     }
 
                     ClipboardManager clipboard = (ClipboardManager) ItineraireFragment.this.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -231,34 +230,37 @@ public class ItineraireFragment extends Fragment {
         }
     };
 
-    public void filters(){
+    public void filters() {
         //https://www.youtube.com/watch?v=4GYKOzgQDWI
         dialogBuilder = new AlertDialog.Builder(this.getContext());
         final View contactPopupView = getLayoutInflater().inflate(R.layout.filters, null);
-        text = (EditText)contactPopupView.findViewById(R.id.distance);
+        text = (EditText) contactPopupView.findViewById(R.id.distance);
 
-        applyFilters = (Button)contactPopupView.findViewById(R.id.filter);
-        resetFilters = (Button)contactPopupView.findViewById(R.id.reset);
+        applyFilters = (Button) contactPopupView.findViewById(R.id.filter);
+        resetFilters = (Button) contactPopupView.findViewById(R.id.reset);
 
         dialogBuilder.setView(contactPopupView);
         dialog = dialogBuilder.create();
         dialog.show();
 
-        applyFilters.setOnClickListener(new View.OnClickListener(){
+        applyFilters.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 //define save button
-                Log.v("FILTER", "clicked on filtrer avec "+text.getText().toString());
-                filter = new Filter(Integer.parseInt(text.getText().toString()));
-
+                try{
+                    Log.v("FILTER", "clicked on filtrer avec " + text.getText().toString());
+                    filter = new Filter(Integer.parseInt(text.getText().toString()));
+                }catch (Exception e){
+                    filter = new Filter();
+                }
                 Log.v("FILTER", filter.toString());
                 updateTrashList();
                 dialog.dismiss();
             }
         });
 
-        resetFilters.setOnClickListener(new View.OnClickListener(){
+        resetFilters.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -271,16 +273,15 @@ public class ItineraireFragment extends Fragment {
         });
     }
 
-    private void updateTrashList(){
+    private void updateTrashList() {
         listView.setAdapter(null);
         ListTrash listTrash;
-        try{
+        try {
             listTrash = new ListTrash(getContext());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return;
         }
-            listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
+        listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
     }
 
     @Override

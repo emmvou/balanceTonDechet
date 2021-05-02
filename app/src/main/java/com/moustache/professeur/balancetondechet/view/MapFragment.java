@@ -1,21 +1,28 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.NetworkOnMainThreadException;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -25,6 +32,10 @@ import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -32,7 +43,14 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
+import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.views.overlay.mylocation.SimpleLocationOverlay;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -40,12 +58,12 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class MapFragment extends Fragment {
     private MapView map;
     private IMapController mapController;
-    private ListTrash selectedTrashes;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
@@ -57,21 +75,37 @@ public class MapFragment extends Fragment {
     private ArrayList<Trash> trashes;
     private OverlayItem user;
 
+    //for path drawing
+    private ArrayList<Trash> selectedTrashes;
+    RoadManager roadManager;
+    Road road;
+    Road[] mRoads;
+    GeoPoint startPoint;
+    GeoPoint destinationPoint;
+    DirectedLocationOverlay myLocationOverlay;
+    String userAgent;
+    protected ArrayList<GeoPoint> viaPoints;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            selectedTrashes = bundle.getParcelable("trashList");
+            selectedTrashes = bundle.getParcelableArrayList("trashList");
             trashes = bundle.getParcelableArrayList("trashes");
 
             for (Trash t : trashes) {
                 Log.v("trash test", t.toString());
             }
+
+            userAgent = Configuration.getInstance().getUserAgentValue();
+
+
+            //todo
+
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
-            if (selectedTrashes != null && selectedTrashes.size() > 0)
-                Log.v("PATH", "there is at least one path to follow");
+
         }
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -111,7 +145,24 @@ public class MapFragment extends Fragment {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            if (selectedTrashes != null && selectedTrashes.size() > 0) {
+                viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+                myLocationOverlay = new DirectedLocationOverlay(this.getContext());
+                myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
+                map.getOverlays().add(myLocationOverlay);
+                getRoadAsync();
+            }
         });
+
+        if (selectedTrashes != null && selectedTrashes.size() > 0) {
+            viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+            myLocationOverlay = new DirectedLocationOverlay(this.getContext());
+            myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
+            map.getOverlays().add(myLocationOverlay);
+            getRoadAsync();
+        } else {
+            viaPoints = new ArrayList<GeoPoint>();
+        }
 
         return view;
     }
@@ -272,4 +323,86 @@ public class MapFragment extends Fragment {
         super.onDestroy();
         locationTrack.stopListener();
     }
+
+
+    private class UpdateRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road[]> {
+
+        private final Context mContext;
+
+        public UpdateRoadTask(Context context) {
+            this.mContext = context;
+        }
+
+        protected Road[] doInBackground(ArrayList<GeoPoint>... params) {
+            ArrayList<GeoPoint> waypoints = params[0];
+            RoadManager roadManager;
+            Locale locale = Locale.getDefault();
+            roadManager = new OSRMRoadManager(mContext, userAgent);
+            return roadManager.getRoads(waypoints);
+        }
+
+        protected void onPostExecute(Road[] result) {
+            mRoads = result;
+            drawPath(result);
+            //getPOIAsync(poiTagText.getText().toString());
+        }
+    }
+
+    private void drawPath(Road[] roads) {
+        //((OSRMRoadManager) roadManager).setMean(OSRMRoadManager.MEAN_BY_CAR);
+        for (Road road : roads) {
+
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+            Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+            TypedArray iconIds = getResources().obtainTypedArray(R.array.direction_icons);
+            for (int i = 0; i < road.mNodes.size(); i++) {
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(map);
+                nodeMarker.setPosition(node.mLocation);
+                nodeMarker.setIcon(nodeIcon);
+                nodeMarker.setTitle("Step " + i);
+                map.getOverlays().add(nodeMarker);
+                nodeMarker.setSnippet(node.mInstructions);
+                nodeMarker.setSubDescription(Road.getLengthDurationText(this.getContext(), node.mLength, node.mDuration));
+                //https://developer.mapquest.com/documentation/open/guidance-api/v2/route/get/
+
+                int iconId = iconIds.getResourceId(node.mManeuverType, R.drawable.ic_empty);
+                if (iconId != R.drawable.ic_empty) {
+                    Drawable image = ResourcesCompat.getDrawable(getResources(), iconId, null);
+                    nodeMarker.setImage(image);
+                }
+
+
+            }
+        }
+    }
+
+
+    public void getRoadAsync() {
+        mRoads = null;
+        GeoPoint roadStartPoint = null;
+        if (startPoint != null) {
+            roadStartPoint = startPoint;
+        } else if (myLocationOverlay.isEnabled() && myLocationOverlay.getLocation() != null) {
+            //use my current location as itinerary start point:
+            roadStartPoint = myLocationOverlay.getLocation();
+        }
+        //if (roadStartPoint == null || destinationPoint == null) {
+        //    updateUIWithRoads(mRoads);
+        //    return;
+        //}
+        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>(2);
+        waypoints.add(roadStartPoint);
+        //add intermediate via points:
+        for (GeoPoint p : viaPoints) {
+            waypoints.add(p);
+        }
+        //waypoints.add(destinationPoint);
+        new UpdateRoadTask(this.getContext()).execute(waypoints);
+    }
+
 }
+
+//https://stackoverflow.com/questions/38539637/osmbonuspack-roadmanager-networkonmainthreadexception

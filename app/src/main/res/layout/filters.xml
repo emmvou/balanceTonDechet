@@ -6,15 +6,16 @@
 
     <TextView
         android:id="@+id/distanceLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="distance en km" />
+        android:text="distance au plus loin en km"
+
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/distance"
-        android:inputType="number"
+        android:inputType="number|text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/distanceLabel"

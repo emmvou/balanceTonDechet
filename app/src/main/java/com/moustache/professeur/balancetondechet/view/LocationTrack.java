@@ -23,6 +23,7 @@ import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 
 import org.json.JSONException;
+import org.osmdroid.util.GeoPoint;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -236,6 +237,10 @@ public class LocationTrack extends Service implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    public GeoPoint currentGeoPoint(){
+        return new GeoPoint(latitude, longitude);
     }
 }
 
