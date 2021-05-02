@@ -45,6 +45,10 @@ public class Trash implements Parcelable, Serializable {
         this.imgPath = imgPath;
     }
 
+    public void setApproved() {
+        isApproved = true;
+    }
+
     protected Trash(Parcel in) {
         name = in.readString();
         desc = in.readString();

@@ -17,13 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BalanceTonDechet">
+        <activity android:name=".view.AdminActivity"></activity>
         <activity
             android:name=".view.TrashDataActivity"
             android:label="@string/title_activity_trash_data"
-            android:theme="@style/Theme.BalanceTonDechet.NoActionBar"></activity>
+            android:theme="@style/Theme.BalanceTonDechet.NoActionBar" />
         <activity
             android:name=".view.ProfileActivity"
-            android:parentActivityName=".view.MainMenuActivity"></activity>
+            android:parentActivityName=".view.MainMenuActivity" />
         <activity android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +42,7 @@
         </activity>
         <activity
             android:name=".view.ProfileNotificationsActivity"
-            android:parentActivityName=".view.MainMenuActivity"></activity>
+            android:parentActivityName=".view.MainMenuActivity" />
     </application>
 
 </manifest>

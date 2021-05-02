@@ -49,6 +49,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@color/light_green"
+        app:itemIconTint="@color/imperial_blue"
+        app:itemTextColor="@color/imperial_blue"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_drawer"/>
 

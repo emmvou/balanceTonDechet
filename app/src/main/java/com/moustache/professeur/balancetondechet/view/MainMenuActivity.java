@@ -45,6 +45,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.main_menu);
         currentUser = getIntent().getExtras().getParcelable("user");
 
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.beige));
+
         try {
             trashes = LoadTrashes.chargerDechets(this);
         } catch (IOException e) {
@@ -134,6 +137,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Intent intent = new Intent(getApplicationContext(), ProfileNotificationsActivity.class);
                 intent.putExtra("user", (Parcelable) currentUser);
                 startActivityForResult(intent, 0);
+            case R.id.drawer_admin:
+                Intent intentAdmin = new Intent(getApplicationContext(),AdminActivity.class);
+                intentAdmin.putParcelableArrayListExtra("trashes",trashes);
+                startActivity(intentAdmin);
             default:
                 break;
         }
