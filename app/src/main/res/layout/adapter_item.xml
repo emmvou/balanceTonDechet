@@ -38,17 +38,18 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/grower"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:id="@+id/grower">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/desc"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".50"
-            android:text="TextView" />
+            android:text="Alors voici un texte d'exemple blablabla bla blabla et c'est un poil long" />
 
         <ImageView
             android:id="@+id/image"
