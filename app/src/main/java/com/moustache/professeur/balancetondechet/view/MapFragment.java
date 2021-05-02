@@ -1,6 +1,7 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -57,6 +58,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class MapFragment extends Fragment {
@@ -81,6 +83,8 @@ public class MapFragment extends Fragment {
     GeoPoint startPoint;
     GeoPoint destinationPoint;
     DirectedLocationOverlay myLocationOverlay;
+    String userAgent;
+    protected ArrayList<GeoPoint> viaPoints;
 
     @Nullable
     @Override
@@ -93,6 +97,12 @@ public class MapFragment extends Fragment {
             for (Trash t : trashes) {
                 Log.v("trash test", t.toString());
             }
+
+            userAgent = Configuration.getInstance().getUserAgentValue();
+
+
+            //todo
+
             //https://github.com/MKergall/osmbonuspack
             //https://github.com/MKergall/osmbonuspack/wiki/Tutorial_1
 
@@ -135,51 +145,23 @@ public class MapFragment extends Fragment {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            if (selectedTrashes != null && selectedTrashes.size() > 0) {
+                viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+                myLocationOverlay = new DirectedLocationOverlay(this.getContext());
+                myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
+                map.getOverlays().add(myLocationOverlay);
+                getRoadAsync();
+            }
         });
 
         if (selectedTrashes != null && selectedTrashes.size() > 0) {
-            //Configuration.getInstance().setUserAgentValue(this.getContext().getPackageName());
-            roadManager = new OSRMRoadManager(this.getContext(), Configuration.getInstance().getUserAgentValue());
-            Log.v("PATH", "Setting up for path drawing");
-            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-            //waypoints.add(new GeoPoint(locationTrack.getLatitude(), locationTrack.getLongitude()));
-            waypoints.add(new GeoPoint(48.13, -1.63));
-            //GeoPoint endPoint = new GeoPoint(selectedTrashes.get(0).getTrashPin().getLatitude(), selectedTrashes.get(0).getTrashPin().getLongitude());
-            GeoPoint endPoint = new GeoPoint(47.13, -1.63);
-            waypoints.add(endPoint);
-            try{
-                road = roadManager.getRoad(waypoints);
-//
-            }
-            catch(NetworkOnMainThreadException e){
-                Log.e("PATH", "could not draw line between points");
-                return view;
-            }
-            ((OSRMRoadManager) roadManager).setMean(OSRMRoadManager.MEAN_BY_CAR);
-            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-            map.getOverlays().add(roadOverlay);
-            map.invalidate();
-            Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
-            TypedArray iconIds = getResources().obtainTypedArray(R.array.direction_icons);
-            for (int i = 0; i < road.mNodes.size(); i++) {
-                RoadNode node = road.mNodes.get(i);
-                Marker nodeMarker = new Marker(map);
-                nodeMarker.setPosition(node.mLocation);
-                nodeMarker.setIcon(nodeIcon);
-                nodeMarker.setTitle("Step " + i);
-                map.getOverlays().add(nodeMarker);
-                nodeMarker.setSnippet(node.mInstructions);
-                nodeMarker.setSubDescription(Road.getLengthDurationText(this.getContext(), node.mLength, node.mDuration));
-                //https://developer.mapquest.com/documentation/open/guidance-api/v2/route/get/
-//
-                int iconId = iconIds.getResourceId(node.mManeuverType, R.drawable.ic_empty);
-                if (iconId != R.drawable.ic_empty) {
-                    Drawable image = ResourcesCompat.getDrawable(getResources(), iconId, null);
-                    nodeMarker.setImage(image);
-                }
-//
-            }
-
+            viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+            myLocationOverlay = new DirectedLocationOverlay(this.getContext());
+            myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
+            map.getOverlays().add(myLocationOverlay);
+            getRoadAsync();
+        } else {
+            viaPoints = new ArrayList<GeoPoint>();
         }
 
         return view;
@@ -342,6 +324,84 @@ public class MapFragment extends Fragment {
         locationTrack.stopListener();
     }
 
+
+    private class UpdateRoadTask extends AsyncTask<ArrayList<GeoPoint>, Void, Road[]> {
+
+        private final Context mContext;
+
+        public UpdateRoadTask(Context context) {
+            this.mContext = context;
+        }
+
+        protected Road[] doInBackground(ArrayList<GeoPoint>... params) {
+            ArrayList<GeoPoint> waypoints = params[0];
+            RoadManager roadManager;
+            Locale locale = Locale.getDefault();
+            roadManager = new OSRMRoadManager(mContext, userAgent);
+            return roadManager.getRoads(waypoints);
+        }
+
+        protected void onPostExecute(Road[] result) {
+            mRoads = result;
+            drawPath(result);
+            //getPOIAsync(poiTagText.getText().toString());
+        }
+    }
+
+    private void drawPath(Road[] roads) {
+        //((OSRMRoadManager) roadManager).setMean(OSRMRoadManager.MEAN_BY_CAR);
+        for (Road road : roads) {
+
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+            Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+            TypedArray iconIds = getResources().obtainTypedArray(R.array.direction_icons);
+            for (int i = 0; i < road.mNodes.size(); i++) {
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(map);
+                nodeMarker.setPosition(node.mLocation);
+                nodeMarker.setIcon(nodeIcon);
+                nodeMarker.setTitle("Step " + i);
+                map.getOverlays().add(nodeMarker);
+                nodeMarker.setSnippet(node.mInstructions);
+                nodeMarker.setSubDescription(Road.getLengthDurationText(this.getContext(), node.mLength, node.mDuration));
+                //https://developer.mapquest.com/documentation/open/guidance-api/v2/route/get/
+
+                int iconId = iconIds.getResourceId(node.mManeuverType, R.drawable.ic_empty);
+                if (iconId != R.drawable.ic_empty) {
+                    Drawable image = ResourcesCompat.getDrawable(getResources(), iconId, null);
+                    nodeMarker.setImage(image);
+                }
+
+
+            }
+        }
+    }
+
+
+    public void getRoadAsync() {
+        mRoads = null;
+        GeoPoint roadStartPoint = null;
+        if (startPoint != null) {
+            roadStartPoint = startPoint;
+        } else if (myLocationOverlay.isEnabled() && myLocationOverlay.getLocation() != null) {
+            //use my current location as itinerary start point:
+            roadStartPoint = myLocationOverlay.getLocation();
+        }
+        //if (roadStartPoint == null || destinationPoint == null) {
+        //    updateUIWithRoads(mRoads);
+        //    return;
+        //}
+        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>(2);
+        waypoints.add(roadStartPoint);
+        //add intermediate via points:
+        for (GeoPoint p : viaPoints) {
+            waypoints.add(p);
+        }
+        //waypoints.add(destinationPoint);
+        new UpdateRoadTask(this.getContext()).execute(waypoints);
+    }
 
 }
 

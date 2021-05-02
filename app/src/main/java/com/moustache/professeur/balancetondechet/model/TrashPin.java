@@ -69,7 +69,7 @@ public class TrashPin implements Parcelable, Serializable {
                 '}';
     }
 
-    private GeoPoint toGeoPoint() {
+    public GeoPoint toGeoPoint() {
         return new GeoPoint(x, y);
     }
 
@@ -89,6 +89,7 @@ public class TrashPin implements Parcelable, Serializable {
     }
 
     public double getLongitude() { return y; }
+
 
     @Override
     public int describeContents() {
