@@ -28,6 +28,7 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 
 import java.util.ArrayList;
 
@@ -76,16 +77,11 @@ public class ItineraireFragment extends Fragment {
         } else {
             locationTrack.showSettingsAlert();
         }
-        ListTrash listTrash;
-        try {
-            listTrash = new ListTrash(getContext());
-        } catch (Exception e) {
-
-            listTrash = new ListTrash();
+        ListTrash listTrash = new ListTrash(Trashes.getInstance().getTrashes());
+        if(listTrash.size() == 0){
             listView = view.findViewById(R.id.listView);
             initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-            ListTrash finalListTrash = listTrash;
-            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
+            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), new ListTrash(Trashes.getInstance().getTrashes()), loc.getLatitude(), loc.getLongitude())));
 
             Button more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
@@ -96,8 +92,7 @@ public class ItineraireFragment extends Fragment {
         }
         listView = view.findViewById(R.id.listView);
         initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-        ListTrash finalListTrash = listTrash;
-        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
+        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), new ListTrash(Trashes.getInstance().getTrashes()), loc.getLatitude(), loc.getLongitude())));
 
         Button more = view.findViewById(R.id.more);
         more.setOnClickListener(v -> {
@@ -275,12 +270,11 @@ public class ItineraireFragment extends Fragment {
 
     private void updateTrashList() {
         listView.setAdapter(null);
-        ListTrash listTrash;
-        try {
-            listTrash = new ListTrash(getContext());
-        } catch (Exception e) {
+        ListTrash listTrash = new ListTrash(Trashes.getInstance().getTrashes());
+        if(listTrash.size() == 0){
             return;
         }
+
         listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
     }
 
