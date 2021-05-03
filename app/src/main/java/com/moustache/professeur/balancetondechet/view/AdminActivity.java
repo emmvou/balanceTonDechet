@@ -77,6 +77,10 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                         load());
                 trashDesc.setText(currentTrash.getDesc());
 
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
                 approuverbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -85,6 +89,7 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                         PendingTrashes.getInstance().remove(position);
                         Trashes.getInstance().add(t);
                         Toast.makeText(getApplicationContext(),"Le post a été approuvé",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
 
@@ -93,12 +98,10 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                     public void onClick(View v) {
                         PendingTrashes.getInstance().remove(position);
                         Toast.makeText(getApplicationContext(),"Le post a été supprimé",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
 
-                mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
-                dialog.show();
             }
         });
 
