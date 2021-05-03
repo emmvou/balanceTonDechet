@@ -1,16 +1,20 @@
 package com.moustache.professeur.balancetondechet.view;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
@@ -37,20 +41,20 @@ public class TrashAdapter extends BaseAdapter {
     private Pair<Double, Double> location;
     private Boolean[] mChecked;
     private Map<Trash, Double> trashesDist;
+    private ItineraireFragment parentFragment;
 
-    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y) {
+    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, ItineraireFragment fr) {
+        parentFragment = fr;
         this.trashes = listTrash;
         this.inflater = LayoutInflater.from(ctx);
         location = Pair.of(x, y);
         mChecked = new Boolean[trashes.size()];
         computeDistances();
-
-
         Arrays.fill(mChecked, true);
     }
 
-    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
-        this(ctx, listTrash, x, y);
+    public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter, ItineraireFragment fr) {
+        this(ctx, listTrash, x, y, fr);
         if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
             mChecked = new Boolean[trashes.size()];
             Arrays.fill(mChecked, true);
@@ -108,6 +112,15 @@ public class TrashAdapter extends BaseAdapter {
 
         layoutItem.setOnClickListener(cListener);
 
+        Button jOne = layoutItem.findViewById(R.id.joinOne);
+        jOne.setTag(Integer.valueOf(position));
+        jOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parentFragment.goToOneTrash( trashes.get((Integer) v.findViewById(R.id.joinOne).getTag()));
+            }
+        });
+
         return layoutItem;
     }
 
@@ -115,10 +128,13 @@ public class TrashAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             LinearLayout l = (LinearLayout) v.findViewById(R.id.grower);
+            Button jOne = v.findViewById(R.id.joinOne);
             if (l.getVisibility() == View.GONE) {
                 l.setVisibility(View.VISIBLE);
+                jOne.setVisibility(View.VISIBLE);
             } else {
                 l.setVisibility(View.GONE);
+                jOne.setVisibility(View.GONE);
             }
         }
     };
@@ -147,6 +163,9 @@ public class TrashAdapter extends BaseAdapter {
         computeDistances();
         Log.v("FILTER", trashes.toString());
     }
+
+
+
 
 }
 

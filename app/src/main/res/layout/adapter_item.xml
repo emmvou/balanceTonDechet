@@ -60,4 +60,12 @@
             android:icon="@drawable/ic_baseline_insert_photo_24" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/joinOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Rejoindre" />
+
+
 </LinearLayout>
