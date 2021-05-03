@@ -137,13 +137,8 @@ public class MapFragment extends Fragment {
 
         initializeMap();
         locationTrack.setLocationChangedCallback((loc) -> {
-            try {
-                addPinPoints();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            addPinPoints();
+
             if (selectedTrashes != null && selectedTrashes.size() > 0) {
                 viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
                 myLocationOverlay = new DirectedLocationOverlay(this.getContext());
@@ -251,7 +246,7 @@ public class MapFragment extends Fragment {
         PinFactory.loadFromContext(getContext());
     }
 
-    private void addPinPoints() throws IOException, ClassNotFoundException {
+    private void addPinPoints() {
         map.getOverlays().clear();
 
         //trashes = parsePins();
@@ -282,10 +277,8 @@ public class MapFragment extends Fragment {
                             return false;
                         }
 
-                        Trash trash = Trashes.getInstance().getTrashes().get(index);
-
                         Intent trashDataIntent = new Intent(getContext(), TrashDataActivity.class);
-                        trashDataIntent.putExtra("trash", (Parcelable) trash);
+                        trashDataIntent.putExtra("trash-id", index);
                         startActivity(trashDataIntent);
 
                         return false;
@@ -315,6 +308,7 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         map.onResume();
+        addPinPoints();
     }
 
     @Override
