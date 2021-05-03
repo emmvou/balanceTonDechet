@@ -33,9 +33,9 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
-import com.moustache.professeur.balancetondechet.persistance.SaveTrashes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +57,6 @@ public class SignalerFragment extends Fragment {
     private Button pictureButton;
     private Button reportButton;
     private static FileWriter fileWriter;
-    private ArrayList<Trash> trashes;
 
 
     private ArrayList<String> permissionsToRequest;
@@ -116,9 +115,6 @@ public class SignalerFragment extends Fragment {
            currentUser = getArguments().getParcelable("User");
         }
         Log.v("USER",currentUser.getNom());
-        if (getArguments().getParcelableArrayList("trashes")!=null){
-            trashes = getArguments().getParcelableArrayList("trashes");
-        }
 
         descTextfield = (EditText) view.findViewById(R.id.descriptionDechet_edit);
         nomTextField = (EditText) view.findViewById(R.id.nomDechet_edit);
@@ -129,7 +125,7 @@ public class SignalerFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String imgPath = nomTextField.getText().toString().replace(" ","_")+trashes.size()+".png";
+                String imgPath = nomTextField.getText().toString().replace(" ","_")+ Trashes.getInstance().getTrashes().size()+".png";
                 new ImageSaver(SignalerFragment.this.getContext()).
                         setFileName(imgPath).
                         setDirectoryName("images").
@@ -149,9 +145,8 @@ public class SignalerFragment extends Fragment {
                     object.put("x", tp.getX());
                     object.put("y", tp.getY());
                     object.put("imgPath",imgPath);
-                    trashes.add(t);
-                    SaveTrashes.sauvegarderDechets(trashes,view.getContext());
-                } catch (JSONException | IOException e) {
+                    Trashes.getInstance().add(t);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Log.v("json",object.toString());

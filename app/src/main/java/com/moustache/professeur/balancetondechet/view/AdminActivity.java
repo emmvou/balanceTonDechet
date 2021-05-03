@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
 import org.w3c.dom.Text;
@@ -24,7 +25,6 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
-    private ArrayList<Trash> trashes;
     private ListView trashListView;
 
     private String names[];
@@ -47,13 +47,11 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        trashes = getIntent().getParcelableArrayListExtra("trashes");
+        names = Trashes.getInstance().getTrashes().stream().map(Trash::getName).toArray(String[]::new);
+        descs = Trashes.getInstance().getTrashes().stream().map(Trash::getDesc).toArray(String[]::new);
+        images = Trashes.getInstance().getTrashes().stream().map(Trash::getImgPath).toArray(String[]::new);
 
-        names = trashes.stream().map(Trash::getName).toArray(String[]::new);
-        descs = trashes.stream().map(Trash::getDesc).toArray(String[]::new);
-        images = trashes.stream().map(Trash::getImgPath).toArray(String[]::new);
-
-        for (Trash t : trashes){
+        for (Trash t : Trashes.getInstance().getTrashes()){
             Log.v("trashes admin",t.toString());
         }
 
@@ -65,7 +63,7 @@ public class AdminActivity extends AppCompatActivity {
         trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trash currentTrash = trashes.get(position);
+                Trash currentTrash = Trashes.getInstance().getTrashes().get(position);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdminActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.dialog_trash_admin,null);
                 TextView trashName =(TextView)  mView.findViewById(R.id.trash_name_dialog);
@@ -84,7 +82,7 @@ public class AdminActivity extends AppCompatActivity {
                 approuverbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        trashes.get(position).setApproved();
+                        Trashes.getInstance().getTrashes().get(position).setApproved();
                         Toast.makeText(getApplicationContext(),"Le post a été approuvé",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -92,7 +90,7 @@ public class AdminActivity extends AppCompatActivity {
                 supprimerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        trashes.remove(position);
+                        Trashes.getInstance().getTrashes().remove(position);
                         Toast.makeText(getApplicationContext(),"Le post a été supprimé",Toast.LENGTH_SHORT).show();
                     }
                 });

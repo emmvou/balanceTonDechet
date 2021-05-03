@@ -30,6 +30,7 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -72,7 +73,6 @@ public class MapFragment extends Fragment {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
 
-    private ArrayList<Trash> trashes;
     private OverlayItem user;
 
     //for path drawing
@@ -92,9 +92,8 @@ public class MapFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             selectedTrashes = bundle.getParcelableArrayList("trashList");
-            trashes = bundle.getParcelableArrayList("trashes");
 
-            for (Trash t : trashes) {
+            for (Trash t : Trashes.getInstance().getTrashes()) {
                 Log.v("trash test", t.toString());
             }
 
@@ -258,7 +257,7 @@ public class MapFragment extends Fragment {
         //trashes = parsePins();
         //trashes = LoadTrashes.chargerDechets(MapFragment.this.getContext());
 
-        ArrayList<OverlayItem> pins = trashes
+        ArrayList<OverlayItem> pins = Trashes.getInstance().getTrashes()
                 .stream()
                 .map(Trash::getTrashPin)
                 .map((pin) -> pin.toOverlayItem(getContext()))
@@ -278,12 +277,12 @@ public class MapFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        if (index == trashes.size()) {
+                        if (index == Trashes.getInstance().getTrashes().size()) {
                             // Have we clicked on the user-position pin?
                             return false;
                         }
 
-                        Trash trash = trashes.get(index);
+                        Trash trash = Trashes.getInstance().getTrashes().get(index);
 
                         Intent trashDataIntent = new Intent(getContext(), TrashDataActivity.class);
                         trashDataIntent.putExtra("trash", (Parcelable) trash);
