@@ -29,6 +29,22 @@ public class ProfileNotificationsActivity extends Activity
         ((TextView) findViewById(R.id.nom)).setText(currentUser.getNom());
         ((TextView) findViewById(R.id.email)).setText(currentUser.getEmail());
 
+        ((CheckBox) findViewById(R.id.checkbox_wants_notifications)).setChecked(currentUser.getWantsToBeNotified() != 0);
+        ((EditText) findViewById(R.id.trigger_distance)).setText(Integer.toString(currentUser.getMetersFromTrashToTriggerNotification()));
+
+        switch (currentUser.getNotificationImportanceLevel())
+        {
+            case 0:
+                ((RadioGroup) findViewById(R.id.group_priority)).check(R.id.low_priority);
+                break;
+            case 1:
+                ((RadioGroup) findViewById(R.id.group_priority)).check(R.id.default_priority);
+                break;
+            case 2:
+                ((RadioGroup) findViewById(R.id.group_priority)).check(R.id.high_priority);
+                break;
+        }
+
         findViewById(R.id.backbutton).setOnClickListener(new View.OnClickListener()
         {
             @Override
