@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
@@ -87,7 +88,7 @@ public class ItineraireFragment extends Fragment {
             ListTrash finalListTrash = listTrash;
             locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
 
-            Button more = view.findViewById(R.id.more);
+            FloatingActionButton more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
 
             });
@@ -99,7 +100,7 @@ public class ItineraireFragment extends Fragment {
         ListTrash finalListTrash = listTrash;
         locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), finalListTrash, loc.getLatitude(), loc.getLongitude())));
 
-        Button more = view.findViewById(R.id.more);
+        FloatingActionButton more = view.findViewById(R.id.more);
         more.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(view.getContext(), v);
             popup.setOnMenuItemClickListener(popListener);
