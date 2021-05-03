@@ -8,13 +8,13 @@ import android.os.Bundle;
 
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Trash;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +23,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class TrashDataActivity extends AppCompatActivity {
-    private Trash trash;
+    private int trashId;
+
+    private String trashName;
 
     private static final String TWITTER_LINK_BASE_URL = "https://mobile.twitter.com/home?status=";
     private static final String MESSAGE_PT1 = "Super ! Je viens de ramasser un(e) ";
@@ -36,7 +38,15 @@ public class TrashDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trash_data);
 
-        trash = getIntent().getParcelableExtra("trash");
+        trashId = getIntent().getIntExtra("trash-id", -1);
+
+        if (trashId == -1) {
+            throw new RuntimeException("Failed to retrieve trash id");
+        }
+
+        Trash trash = Trashes.getInstance().getTrashes().get(trashId);
+
+        trashName = trash.getName();
 
         setTextView(R.id.trash_name, trash.getName());
         setTextView(R.id.trash_desc, trash.getDesc());
@@ -60,6 +70,11 @@ public class TrashDataActivity extends AppCompatActivity {
         setButton(R.id.backbutton, v -> {
             self.finish();
         });
+
+        setButton(R.id.pick_up, v -> {
+            Trashes.getInstance().remove(trashId);
+            self.finish();
+        });
     }
 
     void setTextView(int id, String content) {
@@ -72,7 +87,7 @@ public class TrashDataActivity extends AppCompatActivity {
     }
 
     private String getTwitterLink() {
-        String fullMessage = new StringBuilder().append(MESSAGE_PT1).append(trash.getName()).append(MESSAGE_PT2).toString();
+        String fullMessage = new StringBuilder().append(MESSAGE_PT1).append(trashName).append(MESSAGE_PT2).toString();
         String urlEncodedString;
 
         try {

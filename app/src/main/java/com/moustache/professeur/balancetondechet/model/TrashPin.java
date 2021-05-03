@@ -12,6 +12,7 @@ import org.osmdroid.util.Distance;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class TrashPin implements Parcelable, Serializable {
     private final double x;
@@ -100,5 +101,19 @@ public class TrashPin implements Parcelable, Serializable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(x);
         dest.writeDouble(y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TrashPin trashPin = (TrashPin) o;
+        return Double.compare(trashPin.x, x) == 0 &&
+                Double.compare(trashPin.y, y) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

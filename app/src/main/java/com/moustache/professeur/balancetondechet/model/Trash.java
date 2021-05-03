@@ -1,20 +1,17 @@
 package com.moustache.professeur.balancetondechet.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
-import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Trash implements Parcelable, Serializable {
     private TrashPin trashPin;
@@ -140,5 +137,24 @@ public class Trash implements Parcelable, Serializable {
 
     public String getImgPath() {
         return imgPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trash trash = (Trash) o;
+        return isPickedUp == trash.isPickedUp &&
+                isApproved == trash.isApproved &&
+                Objects.equals(trashPin, trash.trashPin) &&
+                Objects.equals(name, trash.name) &&
+                Objects.equals(desc, trash.desc) &&
+                Objects.equals(userEmail, trash.userEmail) &&
+                Objects.equals(imgPath, trash.imgPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(trashPin, name, desc, userEmail, imgPath, isPickedUp, isApproved);
     }
 }
