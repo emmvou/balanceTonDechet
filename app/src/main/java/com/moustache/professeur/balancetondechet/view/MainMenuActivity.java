@@ -20,9 +20,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
+import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
@@ -41,6 +43,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Trashes.getInstance();
+        PendingTrashes.getInstance();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         currentUser = getIntent().getExtras().getParcelable("user");

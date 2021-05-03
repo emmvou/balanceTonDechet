@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
@@ -23,14 +25,13 @@ import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.stream.Collectors;
 
-public class AdminActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity implements Observer {
     private ListView trashListView;
-
-    private String names[];
-    private String descs[];
-    private String images[];
-
+    private ArrayAdapter adapter;
     private ImageButton backbuttonAdmin;
 
     @Override
@@ -38,8 +39,9 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        backbuttonAdmin = findViewById(R.id.backbuttonAdmin);
+        PendingTrashes.getInstance().addObserver(this);
 
+        backbuttonAdmin = findViewById(R.id.backbuttonAdmin);
         backbuttonAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,15 +49,11 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        names = Trashes.getInstance().getTrashes().stream().map(Trash::getName).toArray(String[]::new);
-        descs = Trashes.getInstance().getTrashes().stream().map(Trash::getDesc).toArray(String[]::new);
-        images = Trashes.getInstance().getTrashes().stream().map(Trash::getImgPath).toArray(String[]::new);
-
-        for (Trash t : Trashes.getInstance().getTrashes()){
+        for (Trash t : PendingTrashes.getInstance().getPendingTrashes()){
             Log.v("trashes admin",t.toString());
         }
 
-        AdminTrashListAdapter adapter=new AdminTrashListAdapter(this, names, descs,images);
+        adapter=new ArrayAdapter(this, android.R.layout.simple_list_item_1, PendingTrashes.getInstance().getPendingTrashes().stream().map(Trash::getName).collect(Collectors.toList()));
 
         trashListView = (ListView) findViewById(R.id.trash_list_view);
         trashListView.setAdapter(adapter);
@@ -63,7 +61,7 @@ public class AdminActivity extends AppCompatActivity {
         trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trash currentTrash = Trashes.getInstance().getTrashes().get(position);
+                Trash currentTrash = PendingTrashes.getInstance().getPendingTrashes().get(position);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdminActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.dialog_trash_admin,null);
                 TextView trashName =(TextView)  mView.findViewById(R.id.trash_name_dialog);
@@ -82,7 +80,10 @@ public class AdminActivity extends AppCompatActivity {
                 approuverbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Trashes.getInstance().getTrashes().get(position).setApproved();
+                        PendingTrashes.getInstance().getPendingTrashes().get(position).setApproved();
+                        Trash t = PendingTrashes.getInstance().getPendingTrashes().get(position);
+                        PendingTrashes.getInstance().remove(position);
+                        Trashes.getInstance().add(t);
                         Toast.makeText(getApplicationContext(),"Le post a été approuvé",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -90,7 +91,7 @@ public class AdminActivity extends AppCompatActivity {
                 supprimerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Trashes.getInstance().getTrashes().remove(position);
+                        PendingTrashes.getInstance().remove(position);
                         Toast.makeText(getApplicationContext(),"Le post a été supprimé",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -101,5 +102,17 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Log.v("update","triggered");
+        Trash t = (Trash) arg;
+        if (t!=null) {
+            Log.v("update",t.toString()+" a été supprimé"+PendingTrashes.getInstance().getPendingTrashes().toString());
+            adapter.clear();
+            adapter.addAll(PendingTrashes.getInstance().getPendingTrashes().stream().map(Trash::getName).collect(Collectors.toList()));
+            adapter.notifyDataSetChanged();
+        }
     }
 }

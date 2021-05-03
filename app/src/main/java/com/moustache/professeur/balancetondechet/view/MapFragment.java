@@ -277,7 +277,7 @@ public class MapFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        if (index == Trashes.getInstance().getTrashes().size()) {
+                        if (index == Trashes.getInstance().getTrashes().size() && !Trashes.getInstance().getTrashes().isEmpty()) {
                             // Have we clicked on the user-position pin?
                             return false;
                         }
