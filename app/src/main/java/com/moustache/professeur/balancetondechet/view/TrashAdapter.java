@@ -49,14 +49,6 @@ public class TrashAdapter extends BaseAdapter {
         Arrays.fill(mChecked, true);
     }
 
-    private void computeDistances() {
-        trashesDist = trashes.stream().collect(Collectors.toMap(
-                t -> t,
-                t -> t.getTrashPin().getDistance(location.getFirst(), location.getSecond())
-        ));
-        this.trashes.sort(Comparator.comparing(item -> trashesDist.get(item)));
-    }
-
     public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter) {
         this(ctx, listTrash, x, y);
         if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
@@ -66,6 +58,15 @@ public class TrashAdapter extends BaseAdapter {
             applyDistFilter(filter.getDistance());
         }
     }
+
+    private void computeDistances() {
+        trashesDist = trashes.stream().collect(Collectors.toMap(
+                t -> t,
+                t -> t.getTrashPin().getDistance(location.getFirst(), location.getSecond())
+        ));
+        this.trashes.sort(Comparator.comparing(item -> trashesDist.get(item)));
+    }
+
 
     @Override
     public int getCount() {

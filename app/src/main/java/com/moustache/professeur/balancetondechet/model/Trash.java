@@ -139,6 +139,14 @@ public class Trash implements Parcelable, Serializable {
         return imgPath;
     }
 
+    public boolean isPickedUp() {
+        return isPickedUp;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
