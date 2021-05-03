@@ -14,8 +14,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/darker_green"
+            android:layout_height="60dp"
+            android:background="@color/imperial_blue"
             android:padding="20dp">
 
             <ImageButton
@@ -23,16 +23,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="?attr/homeAsUpIndicator" />
+                android:src="@drawable/abc_vector_test" />
 
             <TextView
+                android:layout_toRightOf="@+id/backbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="@font/concertone_regular"
                 android:text="Détails du déchet"
-                android:textColor="@color/black"
+                android:textColor="@color/beige"
                 android:textSize="20dp" />
 
         </RelativeLayout>
@@ -49,12 +50,17 @@
                 android:orientation="horizontal"
                 android:layout_margin="10sp">
 
+
                 <TextView
+                    android:textColor="@color/imperial_blue"
+                    android:fontFamily="@font/concertone_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nom du déchet : " />
 
                 <TextView
+                    android:fontFamily="@font/concertone_regular"
+                    android:textColor="@color/imperial_blue"
                     android:id="@+id/trash_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -67,12 +73,39 @@
                 android:orientation="horizontal"
                 android:layout_margin="10sp">
 
+
                 <TextView
+                    android:textColor="@color/imperial_blue"
+                    android:fontFamily="@font/concertone_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type : " />
+
+                <TextView
+                    android:textColor="@color/imperial_blue"
+                    android:fontFamily="@font/concertone_regular"
+                    android:id="@+id/trash_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10sp">
+
+                <TextView
+                    android:textColor="@color/imperial_blue"
+                    android:fontFamily="@font/concertone_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description : " />
 
                 <TextView
+                    android:fontFamily="@font/concertone_regular"
+                    android:textColor="@color/imperial_blue"
                     android:id="@+id/trash_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

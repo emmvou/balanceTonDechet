@@ -66,6 +66,7 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                 View mView = getLayoutInflater().inflate(R.layout.dialog_trash_admin,null);
                 TextView trashName =(TextView)  mView.findViewById(R.id.trash_name_dialog);
                 TextView trashDesc =(TextView) mView.findViewById(R.id.trash_desc_dialog);
+                TextView trashType= (TextView) mView.findViewById(R.id.trash_type_dialog);
                 ImageView trashImg = (ImageView) mView.findViewById(R.id.trash_img_dialog);
                 Button approuverbutton = mView.findViewById((R.id.approuver_button));
                 Button supprimerButton = mView.findViewById((R.id.supprimer_button));
@@ -76,6 +77,7 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                         setDirectoryName("images").
                         load());
                 trashDesc.setText(currentTrash.getDesc());
+                trashType.setText("Type : "+currentTrash.getType().toString());
 
                 mBuilder.setView(mView);
                 AlertDialog dialog = mBuilder.create();

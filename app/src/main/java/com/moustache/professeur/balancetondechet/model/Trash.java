@@ -14,25 +14,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class Trash implements Parcelable, Serializable {
+
     private TrashPin trashPin;
     private String name;
     private String desc;
     private String userEmail;
     private String imgPath;
+    private Type type;
     private boolean isPickedUp = false;
     private boolean isApproved = false;
 
     private static final String JSON_FILENAME = "trashes.json";
 
-    public Trash (String name, String desc, TrashPin trashPin,String userEmail,String imgPath){
+    public Trash (String name, String desc, TrashPin trashPin,String userEmail,String imgPath, Type type){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;
         this.imgPath=imgPath;
         this.userEmail=userEmail;
+        this.type = type;
     }
 
-    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail, String imgPath){
+    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail, String imgPath,Type type){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;
@@ -40,6 +43,7 @@ public class Trash implements Parcelable, Serializable {
         this.isPickedUp = isPickedUp;
         this.userEmail = userEmail;
         this.imgPath = imgPath;
+        this.type = type;
     }
 
     public void setApproved() {
@@ -101,8 +105,9 @@ public class Trash implements Parcelable, Serializable {
         boolean isPickedUp = obj.getBoolean("isPickedUp");
         boolean isApproved = obj.getBoolean("isApproved");
         String imgPath = obj.getString("imgPath");
+        Type type = Type.valueOf(obj.getString("type"));
 
-        return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail,imgPath);
+        return new Trash(name, desc, pin, isPickedUp, isApproved,userEmail,imgPath,type);
     }
 
     @Override
@@ -120,6 +125,7 @@ public class Trash implements Parcelable, Serializable {
         dest.writeByte((byte) (isPickedUp ? 1 : 0));
         dest.writeByte((byte) (isApproved ? 1 : 0));
         dest.writeParcelable(trashPin, flags);
+        dest.writeString(this.type.name());
     }
 
     @Override
@@ -147,6 +153,10 @@ public class Trash implements Parcelable, Serializable {
         return isApproved;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -158,7 +168,8 @@ public class Trash implements Parcelable, Serializable {
                 Objects.equals(name, trash.name) &&
                 Objects.equals(desc, trash.desc) &&
                 Objects.equals(userEmail, trash.userEmail) &&
-                Objects.equals(imgPath, trash.imgPath);
+                Objects.equals(imgPath, trash.imgPath) &&
+                Objects.equals(type,trash.type);
     }
 
     @Override
