@@ -50,6 +50,7 @@ public class TrashDataActivity extends AppCompatActivity {
 
         setTextView(R.id.trash_name, trash.getName());
         setTextView(R.id.trash_desc, trash.getDesc());
+        setTextView(R.id.trash_type,trash.getType().toString());
 
         ImageView trashImg = findViewById(R.id.trash_pict);
 

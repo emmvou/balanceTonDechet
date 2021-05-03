@@ -15,9 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +37,7 @@ import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.Trashes;
+import com.moustache.professeur.balancetondechet.model.Type;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
@@ -58,6 +61,7 @@ public class SignalerFragment extends Fragment {
     private Button pictureButton;
     private Button reportButton;
     private static FileWriter fileWriter;
+    private Spinner typeSpinner;
 
 
     private ArrayList<String> permissionsToRequest;
@@ -74,6 +78,10 @@ public class SignalerFragment extends Fragment {
         reportButton = (Button) view.findViewById(R.id.reportButton);
         pictureButton =(Button) view.findViewById(R.id.pictureButton);
         imageView = (ImageView) view.findViewById(R.id.photo_dechet);
+        typeSpinner = (Spinner) view.findViewById(R.id.spinner_type);
+
+        typeSpinner.setAdapter(new ArrayAdapter<Type>(view.getContext(),
+                android.R.layout.simple_list_item_1,Type.values()));
 
         if (ContextCompat.checkSelfPermission(view.getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ){
             ActivityCompat.requestPermissions(getActivity(),new String[]{ Manifest.permission.CAMERA },100);
@@ -134,23 +142,10 @@ public class SignalerFragment extends Fragment {
 
                 TrashPin tp = new TrashPin(SignalerFragment.this.locationTrack.getLatitude(),SignalerFragment.this.locationTrack.getLongitude());
                 Log.v("DECHET",tp.toString());
-                Trash t = new Trash(nomTextField.getText().toString(),descTextfield.getText().toString(),tp,currentUser.getEmail(),imgPath);
+                Trash t = new Trash( nomTextField.getText().toString(),descTextfield.getText().toString(),tp,currentUser.getEmail(),imgPath,Type.fromString(typeSpinner.getSelectedItem().toString()) );
                 Log.v("DECHET", t.toString());
-                JSONObject object = new JSONObject();
-                try {
-                    object.put("name", nomTextField.getText().toString());
-                    object.put("desc", descTextfield.getText().toString());
-                    object.put("userEmail",currentUser.getEmail());
-                    object.put("isPickedUp", "false");
-                    object.put("isApproved", "true");
-                    object.put("x", tp.getX());
-                    object.put("y", tp.getY());
-                    object.put("imgPath",imgPath);
-                    PendingTrashes.getInstance().add(t);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.v("json",object.toString());
+
+                PendingTrashes.getInstance().add(t);
 
                 Context currentContext = getContext();
 
