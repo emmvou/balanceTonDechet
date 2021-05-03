@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
 import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
+import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.Trashes;
@@ -145,7 +146,7 @@ public class SignalerFragment extends Fragment {
                     object.put("x", tp.getX());
                     object.put("y", tp.getY());
                     object.put("imgPath",imgPath);
-                    Trashes.getInstance().add(t);
+                    PendingTrashes.getInstance().add(t);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

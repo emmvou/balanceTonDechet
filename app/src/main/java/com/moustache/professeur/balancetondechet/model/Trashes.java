@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-public class Trashes extends Observable {
+public class Trashes {
     private static List<Trash> trashes = new ArrayList<Trash>();
     private static Trashes instance= null;
 
@@ -26,14 +26,10 @@ public class Trashes extends Observable {
 
     public void add (Trash t){
         trashes.add(t);
-        setChanged();
-        notifyObservers(t);
     }
 
-    public void remove ( Trash t ){
-        trashes.remove(t);
-        setChanged();
-        notifyObservers(t);
+    public void remove( int index ){
+        trashes.remove(index);
     }
 
     public List<Trash> getTrashes() {
