@@ -8,6 +8,7 @@ import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListTrash extends ArrayList<Trash> implements Parcelable {
 
@@ -17,6 +18,9 @@ public class ListTrash extends ArrayList<Trash> implements Parcelable {
     }
 
     public ListTrash(ListTrash lst){
+        addAll(lst);
+    }
+    public ListTrash(List<Trash> lst){
         addAll(lst);
     }
 
