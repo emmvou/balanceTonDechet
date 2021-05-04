@@ -30,6 +30,7 @@ import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -191,16 +192,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             {
                 double x = location.getLatitude();
                 double y = location.getLongitude();
-                ListTrash listTrash = new ListTrash();
-
-                try
-                {
-                    listTrash = new ListTrash(getApplicationContext());
-                }
-                catch (IOException | ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
+                List<Trash> listTrash = Trashes.getInstance().getTrashes();
 
                 Optional<Trash> closestTrash = listTrash.stream().min( (trash1, trash2) ->
                 {
