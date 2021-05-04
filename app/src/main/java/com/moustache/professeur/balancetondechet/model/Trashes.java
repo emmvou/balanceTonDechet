@@ -18,7 +18,6 @@ public class Trashes {
     }
 
     public Trashes(){
-        super();
         Log.v("Trashes","Construction de la liste de déchet...");
     }
 
@@ -27,7 +26,7 @@ public class Trashes {
     }
 
     public void remove( int index ){
-        trashes.remove(index);
+        FollowedTrashes.getInstance().remove(trashes.remove(index));
     }
 
     public List<Trash> getTrashes() {

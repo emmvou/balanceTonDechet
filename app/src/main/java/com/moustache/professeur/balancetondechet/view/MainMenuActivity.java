@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
 import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
@@ -46,6 +47,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         Trashes.getInstance();
         PendingTrashes.getInstance();
+        FollowedTrashes.getInstance();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);

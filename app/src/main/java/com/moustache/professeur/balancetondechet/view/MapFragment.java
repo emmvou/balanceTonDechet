@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.PinFactory;
 import com.moustache.professeur.balancetondechet.model.Trash;
@@ -76,7 +77,6 @@ public class MapFragment extends Fragment {
     private OverlayItem user;
 
     //for path drawing
-    private ArrayList<Trash> selectedTrashes;
     RoadManager roadManager;
     Road road;
     Road[] mRoads;
@@ -91,7 +91,6 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            selectedTrashes = bundle.getParcelableArrayList("trashList");
 
             for (Trash t : Trashes.getInstance().getTrashes()) {
                 Log.v("trash test", t.toString());
@@ -139,8 +138,8 @@ public class MapFragment extends Fragment {
         locationTrack.setLocationChangedCallback((loc) -> {
             addPinPoints();
 
-            if (selectedTrashes != null && selectedTrashes.size() > 0) {
-                viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+            if (FollowedTrashes.getInstance() != null && FollowedTrashes.getInstance().getTrashes().size() > 0) {
+                viaPoints = FollowedTrashes.getInstance().getTrashes().stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
                 myLocationOverlay = new DirectedLocationOverlay(this.getContext());
                 myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
                 map.getOverlays().add(myLocationOverlay);
@@ -148,8 +147,8 @@ public class MapFragment extends Fragment {
             }
         });
 
-        if (selectedTrashes != null && selectedTrashes.size() > 0) {
-            viaPoints = selectedTrashes.stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+        if (FollowedTrashes.getInstance() != null && FollowedTrashes.getInstance().getTrashes().size() > 0) {
+            viaPoints = FollowedTrashes.getInstance().getTrashes().stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
             myLocationOverlay = new DirectedLocationOverlay(this.getContext());
             myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
             map.getOverlays().add(myLocationOverlay);
@@ -309,6 +308,13 @@ public class MapFragment extends Fragment {
         super.onResume();
         map.onResume();
         addPinPoints();
+        if (FollowedTrashes.getInstance() != null && FollowedTrashes.getInstance().getTrashes().size() > 0) {
+            viaPoints = FollowedTrashes.getInstance().getTrashes().stream().map(t -> t.getTrashPin().toGeoPoint()).collect(Collectors.toCollection(ArrayList::new));
+            myLocationOverlay = new DirectedLocationOverlay(this.getContext());
+            myLocationOverlay.setLocation(locationTrack.currentGeoPoint());
+            map.getOverlays().add(myLocationOverlay);
+            getRoadAsync();
+        }
     }
 
     @Override

@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
+import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
@@ -210,7 +211,8 @@ public class ItineraireFragment extends Fragment {
                 case R.id.reachall:
                     //là on active la carte
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("trashList", ((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
+                    FollowedTrashes.getInstance().replace(((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
+                    //bundle.putParcelableArrayList("trashList", ((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
                     bundle.putParcelableArrayList("trashes", ((TrashAdapter) listView.getAdapter()).getCheckedTrashes().getArrayList());
                     Fragment fragment = new MapFragment();
                     fragment.setArguments(bundle);
