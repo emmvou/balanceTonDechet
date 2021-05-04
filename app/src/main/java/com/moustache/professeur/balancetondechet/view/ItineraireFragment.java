@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -234,6 +235,9 @@ public class ItineraireFragment extends Fragment {
         dialogBuilder = new AlertDialog.Builder(this.getContext());
         final View contactPopupView = getLayoutInflater().inflate(R.layout.filters, null);
         text = (EditText) contactPopupView.findViewById(R.id.distance);
+        CheckBox cPortable = contactPopupView.findViewById(R.id.portable);
+        CheckBox cEncombrant = contactPopupView.findViewById(R.id.encombrant);
+        CheckBox cTresEncombrant = contactPopupView.findViewById(R.id.tresencombran);
 
         applyFilters = (Button) contactPopupView.findViewById(R.id.filter);
         resetFilters = (Button) contactPopupView.findViewById(R.id.reset);
@@ -249,9 +253,9 @@ public class ItineraireFragment extends Fragment {
                 //define save button
                 try{
                     Log.v("FILTER", "clicked on filtrer avec " + text.getText().toString());
-                    filter = new Filter(Integer.parseInt(text.getText().toString()));
+                    filter = new Filter(Integer.parseInt(text.getText().toString()), cPortable.isChecked(), cEncombrant.isChecked(), cTresEncombrant.isChecked());
                 }catch (Exception e){
-                    filter = new Filter();
+                    filter = new Filter(cPortable.isChecked(), cEncombrant.isChecked(), cTresEncombrant.isChecked());
                 }
                 Log.v("FILTER", filter.toString());
                 updateTrashList();

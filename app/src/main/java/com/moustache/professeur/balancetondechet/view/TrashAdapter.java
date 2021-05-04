@@ -56,9 +56,9 @@ public class TrashAdapter extends BaseAdapter {
     public TrashAdapter(Context ctx, ListTrash listTrash, double x, double y, Filter filter, ItineraireFragment fr) {
         this(ctx, listTrash, x, y, fr);
         if (filter.getDistance() >= Filter.EARTH_CIRCUMFERENCE) {
-            mChecked = new Boolean[trashes.size()];
-            Arrays.fill(mChecked, true);
+            applyTypeFilter(filter);
         } else {
+            applyTypeFilter(filter);
             applyDistFilter(filter.getDistance());
         }
     }
@@ -95,7 +95,7 @@ public class TrashAdapter extends BaseAdapter {
         ((TextView) layoutItem.findViewById(R.id.desc)).setText(trashes.get(position).getDesc());
         ((TextView) layoutItem.findViewById(R.id.itineraire_type)).setText(trashes.get(position).getType().toString());
         ((ImageView) layoutItem.findViewById(R.id.image)).setImageBitmap(new ImageSaver(layoutItem.getContext())
-                        .setFileName(trashes.get(position).getImgPath()).setDirectoryName("images").load());
+                .setFileName(trashes.get(position).getImgPath()).setDirectoryName("images").load());
 
 
         //todo ((ImageView) layoutItem.findViewById(R.id.image)).set(trashes.get(position).get());
@@ -118,7 +118,7 @@ public class TrashAdapter extends BaseAdapter {
         jOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parentFragment.goToOneTrash( trashes.get((Integer) v.findViewById(R.id.joinOne).getTag()));
+                parentFragment.goToOneTrash(trashes.get((Integer) v.findViewById(R.id.joinOne).getTag()));
             }
         });
 
@@ -165,7 +165,13 @@ public class TrashAdapter extends BaseAdapter {
         Log.v("FILTER", trashes.toString());
     }
 
-
+    public void applyTypeFilter(Filter filter) {
+        trashes = trashes.stream().filter(t -> filter.selectedTypes().contains(t.getType())).collect(Collectors.toCollection(ListTrash::new));
+        mChecked = new Boolean[trashes.size()];
+        Arrays.fill(mChecked, true);
+        computeDistances();
+        Log.v("FILTER", trashes.toString());
+    }
 
 
 }
