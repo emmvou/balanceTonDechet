@@ -142,10 +142,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 Intent intent = new Intent(getApplicationContext(), ProfileNotificationsActivity.class);
                 intent.putExtra("user", (Parcelable) currentUser);
                 startActivityForResult(intent, 0);
+                break;
             case R.id.drawer_admin:
                 Intent intentAdmin = new Intent(getApplicationContext(),AdminActivity.class);
                 intentAdmin.putParcelableArrayListExtra("trashes",trashes);
                 startActivity(intentAdmin);
+                break;
             default:
                 break;
         }
