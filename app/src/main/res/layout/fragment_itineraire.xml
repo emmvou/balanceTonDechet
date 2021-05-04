@@ -32,9 +32,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/imperial_blue"
-        android:src="@drawable/ic_baseline_add_24"
         android:clickable="true"
-        android:contentDescription="Plus" />
+        android:contentDescription="Plus"
+        android:src="@drawable/gear"
+        app:fabSize="auto" />
 
 
 </RelativeLayout>

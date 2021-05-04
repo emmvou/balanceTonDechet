@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_green"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <TextView
+        android:textColor="@color/imperial_blue"
+        android:fontFamily="@font/concertone_regular"
         android:id="@+id/titre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +19,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="@color/imperial_blue"
+        android:fontFamily="@font/concertone_regular"
         android:id="@+id/distanceLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titre" />
 
     <EditText
+        android:fontFamily="@font/concertone_regular"
         android:id="@+id/distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,6 +42,8 @@
         app:layout_constraintTop_toBottomOf="@+id/distanceLabel"></EditText>
 
     <TextView
+        android:textColor="@color/imperial_blue"
+        android:fontFamily="@font/concertone_regular"
         android:id="@+id/typeLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,15 +63,18 @@
         android:id="@+id/checkboxes">
 
         <CheckBox
+            android:textColor="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
             android:id="@+id/portable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/imperial_blue"
-
             android:checked="true"
             android:text="Portable" />
 
         <CheckBox
+            android:textColor="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
             android:id="@+id/encombrant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,6 +83,8 @@
             android:text="Encombrant" />
 
         <CheckBox
+            android:textColor="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
             android:id="@+id/tresencombran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,6 +103,7 @@
         app:layout_constraintTop_toBottomOf="@+id/checkboxes">
 
         <Button
+            android:fontFamily="@font/concertone_regular"
             android:id="@+id/reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,6 +112,7 @@
             android:text="Annuler" />
 
         <Button
+            android:fontFamily="@font/concertone_regular"
             android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
