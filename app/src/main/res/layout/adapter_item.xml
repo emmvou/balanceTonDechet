@@ -52,6 +52,13 @@
             android:layout_weight=".50"
             android:text="Alors voici un texte d'exemple blablabla bla blabla et c'est un poil long" />
 
+        <TextView
+            android:id="@+id/itineraire_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight=".50"
+            android:text="Type" />
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
@@ -59,5 +66,13 @@
             android:layout_weight=".50"
             android:icon="@drawable/ic_baseline_insert_photo_24" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/joinOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Rejoindre" />
+
 
 </LinearLayout>

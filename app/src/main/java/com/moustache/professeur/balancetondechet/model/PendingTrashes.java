@@ -20,8 +20,8 @@ public class PendingTrashes extends Observable {
     public PendingTrashes(){
         super();
         Log.v("PendingTrashes","Construction de la liste de posts...");
-        pendingTrashes.add(new Trash("Salut","je sabote la BDD",new TrashPin(43.6179,7.0747),"test@gmail.com","/storage/emulated/0/DCIM/Camera/IMG_20210503_132915.jpg"));
-        pendingTrashes.add(new Trash("Table verre","Table en verre au bord de la route mirabeau",new TrashPin(43.6165,7.0740),"test@gmail.com","/storage/emulated/0/DCIM/Camera/IMG_20210503_132915.jpg"));
+        pendingTrashes.add(new Trash("Salut","je sabote la BDD",new TrashPin(43.6179,7.0747),"test@gmail.com","/storage/emulated/0/DCIM/Camera/IMG_20210503_132915.jpg",Type.TRES_ENCOMBRANT));
+        pendingTrashes.add(new Trash("Table verre","Table en verre au bord de la route mirabeau",new TrashPin(43.6165,7.0740),"test@gmail.com","/storage/emulated/0/DCIM/Camera/IMG_20210503_132915.jpg",Type.ENCOMBRANT));
     }
 
     public void add (Trash t){

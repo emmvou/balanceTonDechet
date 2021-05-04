@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -28,10 +29,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -82,8 +85,8 @@ public class ItineraireFragment extends Fragment {
         ListTrash listTrash = getAllowedTrashes(new ListTrash(Trashes.getInstance().getTrashes()));
         if(listTrash.size() == 0){
             listView = view.findViewById(R.id.listView);
-            initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), getAllowedTrashes(new ListTrash(Trashes.getInstance().getTrashes())), loc.getLatitude(), loc.getLongitude())));
+            initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), ItineraireFragment.this));
+            locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), getAllowedTrashes(new ListTrash(Trashes.getInstance().getTrashes())), loc.getLatitude(), loc.getLongitude(), ItineraireFragment.this)));
 
             FloatingActionButton more = view.findViewById(R.id.more);
             more.setOnClickListener(v -> {
@@ -93,8 +96,8 @@ public class ItineraireFragment extends Fragment {
             return view;
         }
         listView = view.findViewById(R.id.listView);
-        initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude()));
-        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), getAllowedTrashes(new ListTrash(Trashes.getInstance().getTrashes())), loc.getLatitude(), loc.getLongitude())));
+        initAdapter(listView, new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), ItineraireFragment.this));
+        locationTrack.setLocationChangedCallback((loc) -> initAdapter(listView, new TrashAdapter(getContext(), getAllowedTrashes(new ListTrash(Trashes.getInstance().getTrashes())), loc.getLatitude(), loc.getLongitude(),ItineraireFragment.this)));
 
         FloatingActionButton more = view.findViewById(R.id.more);
         more.setOnClickListener(v -> {
@@ -232,6 +235,9 @@ public class ItineraireFragment extends Fragment {
         dialogBuilder = new AlertDialog.Builder(this.getContext());
         final View contactPopupView = getLayoutInflater().inflate(R.layout.filters, null);
         text = (EditText) contactPopupView.findViewById(R.id.distance);
+        CheckBox cPortable = contactPopupView.findViewById(R.id.portable);
+        CheckBox cEncombrant = contactPopupView.findViewById(R.id.encombrant);
+        CheckBox cTresEncombrant = contactPopupView.findViewById(R.id.tresencombran);
 
         applyFilters = (Button) contactPopupView.findViewById(R.id.filter);
         resetFilters = (Button) contactPopupView.findViewById(R.id.reset);
@@ -247,9 +253,9 @@ public class ItineraireFragment extends Fragment {
                 //define save button
                 try{
                     Log.v("FILTER", "clicked on filtrer avec " + text.getText().toString());
-                    filter = new Filter(Integer.parseInt(text.getText().toString()));
+                    filter = new Filter(Integer.parseInt(text.getText().toString()), cPortable.isChecked(), cEncombrant.isChecked(), cTresEncombrant.isChecked());
                 }catch (Exception e){
-                    filter = new Filter();
+                    filter = new Filter(cPortable.isChecked(), cEncombrant.isChecked(), cTresEncombrant.isChecked());
                 }
                 Log.v("FILTER", filter.toString());
                 updateTrashList();
@@ -277,11 +283,27 @@ public class ItineraireFragment extends Fragment {
             return;
         }
 
-        listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter));
+        listView.setAdapter(new TrashAdapter(getContext(), listTrash, locationTrack.getLatitude(), locationTrack.getLongitude(), filter, ItineraireFragment.this));
     }
 
     private ListTrash getAllowedTrashes(ListTrash lst){
         return lst.stream().filter(trash -> trash.isApproved() && !trash.isPickedUp()).collect(Collectors.toCollection(ListTrash::new));
+    }
+
+    void goToOneTrash(Trash trash){
+        Log.v("PATH", "following : "+trash.toString());
+        ArrayList<Trash> lst = new ArrayList<>();
+        lst.add(trash);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("trashList", lst);
+        bundle.putParcelableArrayList("trashes", lst);
+        Fragment fragment = new MapFragment();
+        fragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        if (filter != null) {
+            Log.v("FILTER", String.valueOf(filter.getDistance()));
+        }
+
     }
 
     @Override
