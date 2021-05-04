@@ -22,7 +22,7 @@
         <item
             android:id="@+id/drawer_admin"
             android:icon="@drawable/ic_baseline_build_24"
-            android:title="Administrer"
+            android:title="Modération"
             android:visible="false" />
 
     </group>

@@ -173,6 +173,41 @@ public class TrashAdapter extends BaseAdapter {
         Log.v("FILTER", trashes.toString());
     }
 
+    void removeAllChecks(ViewGroup vg) {
+        View v = null;
+        for(int i = 0; i < vg.getChildCount(); i++){
+            try {
+                v = vg.getChildAt(i);
+                ((CheckBox)v).setChecked(false);
+            }
+            catch(Exception e1){ //if not checkBox, null View, etc
+                try {
+                    removeAllChecks((ViewGroup)v);
+                }
+                catch(Exception e2){ //v is not a view group
+                    continue;
+                }
+            }
+        }
+    }
+
+    void addAllChecks(ViewGroup vg) {
+        View v = null;
+        for(int i = 0; i < vg.getChildCount(); i++){
+            try {
+                v = vg.getChildAt(i);
+                ((CheckBox)v).setChecked(true);
+            }
+            catch(Exception e1){ //if not checkBox, null View, etc
+                try {
+                    addAllChecks((ViewGroup)v);
+                }
+                catch(Exception e2){ //v is not a view group
+                    continue;
+                }
+            }
+        }
+    }
 
 }
 

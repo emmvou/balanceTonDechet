@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="none">
         <item
+            android:id="@+id/checkall"
+            android:title="Tout cocher" />
+        <item
+            android:id="@+id/uncheckall"
+            android:title="Tout décocher" />
+        <item
             android:id="@+id/filter"
             android:title="Filtrer" />
         <item

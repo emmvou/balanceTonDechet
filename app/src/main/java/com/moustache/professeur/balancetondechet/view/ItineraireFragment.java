@@ -224,6 +224,12 @@ public class ItineraireFragment extends Fragment {
 
                     Toast.makeText(ItineraireFragment.this.getContext(), "Copié", Toast.LENGTH_SHORT).show();
                     return true;
+                case R.id.checkall:
+                    ((TrashAdapter)listView.getAdapter()).addAllChecks(listView);
+                    return true;
+                case R.id.uncheckall:
+                    ((TrashAdapter)listView.getAdapter()).removeAllChecks(listView);
+                    return true;
                 default:
                     return false;
             }
