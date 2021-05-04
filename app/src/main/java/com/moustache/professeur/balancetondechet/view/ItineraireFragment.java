@@ -320,11 +320,9 @@ public class ItineraireFragment extends Fragment {
         lst.add(trash);
         Bundle bundle = new Bundle();
         FollowedTrashes.getInstance().replace(new ArrayList<>(Collections.singletonList(trash)));
-        //bundle.putParcelableArrayList("trashList", lst);
         bundle.putParcelableArrayList("trashes", lst);
         Fragment fragment = new MapFragment();
         fragment.setArguments(bundle);
-        //todo here
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         if (filter != null) {
             Log.v("FILTER", String.valueOf(filter.getDistance()));

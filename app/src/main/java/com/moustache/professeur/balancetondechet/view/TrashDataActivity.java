@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class TrashDataActivity extends AppCompatActivity {
     private int trashId;
@@ -76,6 +79,11 @@ public class TrashDataActivity extends AppCompatActivity {
             Trashes.getInstance().remove(trashId);
             self.finish();
         });
+
+        setButton(R.id.goTo, v -> {
+            FollowedTrashes.getInstance().replace(new ArrayList<>(Collections.singletonList(trash)));
+            self.finish();
+        });
     }
 
     void setTextView(int id, String content) {
@@ -102,4 +110,5 @@ public class TrashDataActivity extends AppCompatActivity {
 
         return new StringBuilder().append(TWITTER_LINK_BASE_URL).append(urlEncodedString).toString();
     }
+
 }

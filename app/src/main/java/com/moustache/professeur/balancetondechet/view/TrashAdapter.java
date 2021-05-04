@@ -106,7 +106,6 @@ public class TrashAdapter extends BaseAdapter {
         }
         CheckBox cBox = (CheckBox) layoutItem.findViewById(R.id.toPick);
         //https://stackoverflow.com/questions/12647001/listview-with-custom-adapter-containing-checkboxes
-        //CheckBox cbox = (CheckBox)layoutItem.findViewById(R.id.toPick);
         cBox.setTag(Integer.valueOf(position));
         cBox.setChecked(mChecked[position]);
         cBox.setOnCheckedChangeListener(mListener);
