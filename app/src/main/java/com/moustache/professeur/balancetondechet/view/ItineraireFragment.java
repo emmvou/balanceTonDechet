@@ -36,6 +36,8 @@ import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -317,10 +319,12 @@ public class ItineraireFragment extends Fragment {
         ArrayList<Trash> lst = new ArrayList<>();
         lst.add(trash);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("trashList", lst);
+        FollowedTrashes.getInstance().replace(new ArrayList<>(Collections.singletonList(trash)));
+        //bundle.putParcelableArrayList("trashList", lst);
         bundle.putParcelableArrayList("trashes", lst);
         Fragment fragment = new MapFragment();
         fragment.setArguments(bundle);
+        //todo here
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         if (filter != null) {
             Log.v("FILTER", String.valueOf(filter.getDistance()));
