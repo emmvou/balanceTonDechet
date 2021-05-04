@@ -21,8 +21,8 @@ public class Trash implements Parcelable, Serializable {
     private String userEmail;
     private String imgPath;
     private Type type;
-    private boolean isPickedUp = false;
-    private boolean isApproved = false;
+    private boolean isPickedUp;
+    private boolean isApproved;
 
     private static final String JSON_FILENAME = "trashes.json";
 
@@ -33,9 +33,11 @@ public class Trash implements Parcelable, Serializable {
         this.imgPath=imgPath;
         this.userEmail=userEmail;
         this.type = type;
+        isPickedUp = false;
+        isApproved = false;
     }
 
-    private Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail, String imgPath,Type type){
+    public Trash (String name, String desc, TrashPin trashPin, boolean isPickedUp, boolean isApproved, String userEmail, String imgPath,Type type){
         this.name=name;
         this.desc = desc;
         this.trashPin = trashPin;

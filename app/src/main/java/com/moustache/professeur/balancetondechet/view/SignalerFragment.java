@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -146,6 +147,10 @@ public class SignalerFragment extends Fragment {
                 Log.v("DECHET", t.toString());
 
                 PendingTrashes.getInstance().add(t);
+
+                Fragment fragment = new MapFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                Toast.makeText(SignalerFragment.this.getContext(),"Le déchet a été signalé !",Toast.LENGTH_SHORT).show();
 
                 Context currentContext = getContext();
 
