@@ -13,6 +13,34 @@
       "nom": "Ad",
       "prenom": "Min",
       "admin": true
+    },
+    {
+      "email": "theo@gmail.com",
+      "mdp": "azerty",
+      "nom": "Roosvelt",
+      "prenom": "Theo",
+      "admin": false
+    },
+    {
+      "email": "antoine@gmail.com",
+      "mdp": "azerty",
+      "nom": "Daniel",
+      "prenom": "Antoine",
+      "admin": true
+    },
+    {
+      "email": "karen@gmail.com",
+      "mdp": "azerty",
+      "nom": "Gillan",
+      "prenom": "Karen",
+      "admin": false
+    },
+    {
+      "email": "marc@gmail.com",
+      "mdp": "azerty",
+      "nom": "Pol",
+      "prenom": "Marc",
+      "admin": false
     }
   ]
 }
