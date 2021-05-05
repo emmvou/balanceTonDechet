@@ -34,8 +34,8 @@ public class TrashDataActivity extends AppCompatActivity {
     private String trashName;
 
     private static final String TWITTER_LINK_BASE_URL = "https://mobile.twitter.com/home?status=";
-    private static final String MESSAGE_PT1 = "Super ! Je viens de ramasser un(e) ";
-    private static final String MESSAGE_PT2 = " dans ma ville grace à Balance Ton Déchet. cc @balanceDechet\n";
+    private static final String MESSAGE_PT1 = "Quelqu'un peut m'aider à ramasser un(e) ";
+    private static final String MESSAGE_PT2 = " dans ma ville ?\ncc @balanceTonDechet";
 
     public TrashDataActivity() {}
 
