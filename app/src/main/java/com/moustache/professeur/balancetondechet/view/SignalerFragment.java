@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -135,6 +136,7 @@ public class SignalerFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String imgPath = nomTextField.getText().toString().replace(" ","_")+ Trashes.getInstance().getTrashes().size()+".png";
                 new ImageSaver(SignalerFragment.this.getContext()).
                         setFileName(imgPath).
@@ -146,34 +148,73 @@ public class SignalerFragment extends Fragment {
                 Trash t = new Trash( nomTextField.getText().toString(),descTextfield.getText().toString(),tp,currentUser.getEmail(),imgPath,Type.fromString(typeSpinner.getSelectedItem().toString()) );
                 Log.v("DECHET", t.toString());
 
-                PendingTrashes.getInstance().add(t);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getContext());
+                View mView = getLayoutInflater().inflate(R.layout.dialog_trash_report,null);
 
-                Fragment fragment = new MapFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                Toast.makeText(SignalerFragment.this.getContext(),"Le déchet a été signalé !",Toast.LENGTH_SHORT).show();
+                Button confirmButton = mView.findViewById((R.id.confirm_button_report));
+                Button cancelButton = mView.findViewById((R.id.cancel_button_report));
 
-                Context currentContext = getContext();
+                TextView trashName = mView.findViewById(R.id.trash_name_report);
+                TextView trashDesc = mView.findViewById(R.id.trash_desc_report);
+                TextView trashType = mView.findViewById(R.id.trash_type_report);
+                ImageView trashImg = mView.findViewById(R.id.trash_img_report);
 
-                new CountDownTimer(30000, 1000)
-                {
+                trashName.setText(t.getName());
+                trashDesc.setText(t.getDesc());
+                trashType.setText(t.getType().toString());
+                Bitmap trashImgBitmap = new ImageSaver(SignalerFragment.this.getContext()).
+                        setFileName(t.getImgPath())
+                        .setDirectoryName("images")
+                        .load();
+                trashImg.setImageBitmap(trashImgBitmap);
+
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+                confirmButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onTick(long millisUntilFinished)
-                    {
-                        Log.d("timer", millisUntilFinished / 1000 + " seconds remaining !");
-                    }
+                    public void onClick(View v) {
+                        ///////////
+                        PendingTrashes.getInstance().add(t);
+                        Fragment fragment = new MapFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        Toast.makeText(SignalerFragment.this.getContext(),"Le déchet a été signalé !",Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onFinish()
-                    {
-                        new NotificationBuilder().sendNotificationOnChannel(
-                                "Déchet ramassé",
-                                "Une personne a ramassé le déchet que vous avez précédemment signalé !",
-                                NotificationManager.CHANNEL_2,
-                                R.drawable.trash,
-                                NotificationCompat.PRIORITY_DEFAULT,
-                                currentContext);
+                        Context currentContext = getContext();
+
+                        new CountDownTimer(30000, 1000)
+                        {
+                            @Override
+                            public void onTick(long millisUntilFinished)
+                            {
+                                Log.d("timer", millisUntilFinished / 1000 + " seconds remaining !");
+                            }
+
+                            @Override
+                            public void onFinish()
+                            {
+                                new NotificationBuilder().sendNotificationOnChannel(
+                                        "Déchet ramassé",
+                                        "Une personne a ramassé le déchet que vous avez précédemment signalé !",
+                                        NotificationManager.CHANNEL_2,
+                                        R.drawable.trash,
+                                        NotificationCompat.PRIORITY_DEFAULT,
+                                        currentContext);
+                            }
+                        }.start();
+                        dialog.dismiss();
+                        ///////////////////
                     }
-                }.start();
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
         });
 

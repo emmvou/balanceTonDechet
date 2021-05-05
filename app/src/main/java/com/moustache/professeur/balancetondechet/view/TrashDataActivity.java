@@ -12,12 +12,15 @@ import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -76,8 +79,33 @@ public class TrashDataActivity extends AppCompatActivity {
         });
 
         setButton(R.id.pick_up, v -> {
-            Trashes.getInstance().remove(trashId);
-            self.finish();
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrashDataActivity.this);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_trash_pickup,null);
+
+            Button confirmButton = mView.findViewById((R.id.confirm_button_pickup));
+            Button cancelButton = mView.findViewById((R.id.cancel_button_pickup));
+
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
+
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Trashes.getInstance().getTrashes().get(trashId).setApproved();
+                    Trashes.getInstance().remove(trashId);
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(),"Le déchet a été ramassé !",Toast.LENGTH_SHORT).show();
+                    self.finish();
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
         });
 
         setButton(R.id.goTo, v -> {

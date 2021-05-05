@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/light_green"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:textColor="@color/imperial_blue"
+        android:layout_marginTop="10dp"
+        android:id="@+id/trash_name_pickup"
+        android:textSize="20dp"
+        android:fontFamily="@font/concertone_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Ramasser ce déchet ?"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:backgroundTint="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
+            android:id="@+id/confirm_button_pickup"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            android:text="Confirmer" />
+
+        <Button
+            android:fontFamily="@font/concertone_regular"
+            android:backgroundTint="@color/imperial_blue"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/cancel_button_pickup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Annuler" />
+
+    </LinearLayout>
+
+</LinearLayout>
