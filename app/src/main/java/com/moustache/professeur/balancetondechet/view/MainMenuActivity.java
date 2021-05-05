@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -196,19 +197,19 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 double y = location.getLongitude();
                 List<Trash> listTrash = Trashes.getInstance().getTrashes();
 
-                Optional<Trash> closestTrash = listTrash.stream().min( (trash1, trash2) ->
+                listTrash = listTrash.stream().filter( trash ->
                 {
-                    double d1 = trash1.getTrashPin().getDistance(x, y);
-                    double d2 = trash2.getTrashPin().getDistance(x, y);
-                    return Double.compare(d1, d2);
-                });
+                    return trash.getTrashPin().getDistance(x, y)*1000 <= currentUser.getMetersFromTrashToTriggerNotification();
+                }).collect(Collectors.toList());
 
-                double distance = closestTrash.isPresent() ? closestTrash.get().getTrashPin().getDistance(x, y) * 1000 : -1;
-
-                if(distance > 0 && distance <= currentUser.getMetersFromTrashToTriggerNotification())
+                if(listTrash.size() > 0)
                 {
                     String channelId = "";
                     int priority = 0;
+                    String title = listTrash.size() == 1 ? "Déchet à proximité" : "Déchets à proximité";
+                    String message = listTrash.size() == 1 ?
+                            "Un déchet se trouve à " + (int) (listTrash.get(0).getTrashPin().getDistance(x, y)*1000)  + "m de vous !" :
+                            "Plusieurs déchets se trouvent à moins de " + currentUser.getMetersFromTrashToTriggerNotification() + "m de vous !";
 
                     switch(currentUser.getNotificationImportanceLevel())
                     {
@@ -227,8 +228,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     }
 
                     new NotificationBuilder().sendNotificationOnChannel(
-                            "Déchet à proximité",
-                            "Un déchet se trouve à " + (int) distance + "m de vous !",
+                            title,
+                            message,
                             channelId,
                             R.drawable.trash,
                             priority,
