@@ -64,13 +64,13 @@
             android:text="Approuver" />
 
         <Button
-            android:fontFamily="@font/concertone_regular"
-            android:backgroundTint="@color/imperial_blue"
-            android:layout_marginLeft="10dp"
             android:id="@+id/supprimer_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Supprimer" />
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
+            android:text="Invalider" />
 
     </LinearLayout>
 
