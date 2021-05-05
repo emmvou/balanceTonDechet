@@ -179,7 +179,7 @@ public class SignalerFragment extends Fragment {
                         PendingTrashes.getInstance().add(t);
                         Fragment fragment = new MapFragment();
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                        Toast.makeText(SignalerFragment.this.getContext(),"Le déchet a été signalé !",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignalerFragment.this.getContext(),"Le déchet a été signalé, attente de modération...",Toast.LENGTH_SHORT).show();
 
                         Context currentContext = getContext();
 

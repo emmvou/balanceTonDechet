@@ -90,7 +90,7 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                         Trash t = PendingTrashes.getInstance().getPendingTrashes().get(position);
                         PendingTrashes.getInstance().remove(position);
                         Trashes.getInstance().add(t);
-                        Toast.makeText(getApplicationContext(),"Le post a été approuvé",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Le déchet a été approuvé",Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 });
@@ -99,7 +99,7 @@ public class AdminActivity extends AppCompatActivity implements Observer {
                     @Override
                     public void onClick(View v) {
                         PendingTrashes.getInstance().remove(position);
-                        Toast.makeText(getApplicationContext(),"Le post a été supprimé",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Le déchet a été invalidé",Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 });
