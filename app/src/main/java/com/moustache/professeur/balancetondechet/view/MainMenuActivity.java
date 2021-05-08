@@ -21,9 +21,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
+import com.moustache.professeur.balancetondechet.model.LocationTrack;
 import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
-import com.moustache.professeur.balancetondechet.model.ListTrash;
 import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 import com.moustache.professeur.balancetondechet.model.User;
@@ -32,7 +32,6 @@ import com.moustache.professeur.balancetondechet.persistance.LoadTrashes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

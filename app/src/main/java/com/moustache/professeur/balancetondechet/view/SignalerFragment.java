@@ -34,6 +34,7 @@ import androidx.preference.PreferenceManager;
 
 import com.moustache.professeur.balancetondechet.NotificationManager;
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.model.LocationTrack;
 import com.moustache.professeur.balancetondechet.model.NotificationBuilder;
 import com.moustache.professeur.balancetondechet.model.PendingTrashes;
 import com.moustache.professeur.balancetondechet.model.Trash;
@@ -43,12 +44,9 @@ import com.moustache.professeur.balancetondechet.model.Type;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.persistance.ImageSaver;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;

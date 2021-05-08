@@ -1,4 +1,4 @@
-package com.moustache.professeur.balancetondechet.view;
+package com.moustache.professeur.balancetondechet.model;
 
 
 import android.Manifest;
@@ -13,16 +13,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
-import com.moustache.professeur.balancetondechet.model.ListTrash;
-import com.moustache.professeur.balancetondechet.model.TrashPin;
-
-import org.json.JSONException;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.Objects;

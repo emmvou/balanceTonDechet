@@ -31,14 +31,13 @@ import com.moustache.professeur.balancetondechet.R;
 import com.moustache.professeur.balancetondechet.model.Filter;
 import com.moustache.professeur.balancetondechet.model.FollowedTrashes;
 import com.moustache.professeur.balancetondechet.model.ListTrash;
+import com.moustache.professeur.balancetondechet.model.LocationTrack;
 import com.moustache.professeur.balancetondechet.model.Trash;
 import com.moustache.professeur.balancetondechet.model.TrashPin;
 import com.moustache.professeur.balancetondechet.model.Trashes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
