@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.moustache.professeur.balancetondechet.R;
+import com.moustache.professeur.balancetondechet.controllers.UserController;
 import com.moustache.professeur.balancetondechet.model.User;
 import com.moustache.professeur.balancetondechet.utils.JsonParser;
 
@@ -28,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText emailTextfield;
     private EditText passwordTextfield;
     private Button connexionButton;
+    private UserController userController;
 
 
     @Override
@@ -38,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         connexionButton = (Button) findViewById(R.id.connexionButton);
         emailTextfield = (EditText) findViewById(R.id.emailTextfield);
         passwordTextfield = (EditText) findViewById(R.id.passwordTextfield);
+        userController = new UserController();
 
         connexionButton.setOnClickListener(this);
 
@@ -47,36 +51,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick (View v){
         String email = emailTextfield.getText().toString();
         String mdp = passwordTextfield.getText().toString();
-        String mdpJson = null;
-        String emailJson = null;
-        String prenomJson = null;
-        String nomJson = null;
 
-        String parsedUser = JsonParser.getJsonFromAssets(this.getApplicationContext(),"users.json");
-        Log.v("JSON : ",parsedUser);
+        User currentUser = userController.login(email,mdp,this.getApplicationContext());
 
-        try {
-            JSONObject jObject = new JSONObject(parsedUser);
-            emailJson = jObject.getString("email");
-            mdpJson = jObject.getString("mdp");
-            nomJson = jObject.getString("nom");
-            prenomJson = jObject.getString("prenom");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        //Connexion de l'utilisateur
-        if ((email.compareTo(emailJson) == 0) && (mdp.compareTo(mdpJson) == 0 )){
-            User currentUser = new User(emailJson,nomJson,prenomJson);
+        if (currentUser!=null){
             Log.v("Login","Connexion fructueuse : "+currentUser.getNom());
             Intent intentMainMenu = new Intent(this, MainMenuActivity.class);
-            intentMainMenu.putExtra("user",currentUser);
+            intentMainMenu.putExtra("user",(Parcelable)currentUser);
             startActivity(intentMainMenu);
         }
         else {
             Toast.makeText(getApplicationContext(),"Erreur email ou mot de passe",Toast.LENGTH_SHORT).show();
         }
-
     }
+
 }

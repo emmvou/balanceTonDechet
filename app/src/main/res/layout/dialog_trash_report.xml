@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/light_green"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:textColor="@color/imperial_blue"
+        android:layout_marginTop="10dp"
+        android:id="@+id/trash_name_report"
+        android:textSize="20dp"
+        android:fontFamily="@font/concertone_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Name"/>
+
+    <TextView
+        android:textColor="@color/imperial_blue"
+        android:layout_marginTop="10dp"
+        android:id="@+id/trash_type_report"
+        android:textSize="20dp"
+        android:fontFamily="@font/concertone_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Type"/>
+
+    <ImageView
+        android:id="@+id/trash_img_report"
+        android:layout_marginTop="10dp"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:textColor="@color/imperial_blue"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/concertone_regular"
+        android:id="@+id/trash_desc_report"
+        android:layout_gravity="center"
+        android:text="description"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:backgroundTint="@color/imperial_blue"
+            android:fontFamily="@font/concertone_regular"
+            android:id="@+id/confirm_button_report"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            android:text="Confirmer" />
+
+        <Button
+            android:fontFamily="@font/concertone_regular"
+            android:backgroundTint="@color/imperial_blue"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/cancel_button_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Annuler" />
+
+    </LinearLayout>
+
+</LinearLayout>

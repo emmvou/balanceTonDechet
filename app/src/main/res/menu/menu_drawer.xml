@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_profil"
+            android:icon="@drawable/ic_baseline_person_24"
+            android:title="Profil" />
+
+        <item
+            android:id="@+id/drawer_logout"
+            android:icon="@drawable/ic_menu_offline"
+            android:title="Se déconnecter" />
+
+        <item
+            android:id="@+id/drawer_notifs"
+            android:icon="@drawable/gear"
+            android:title="Paramètres" />
+
+        <item
+            android:id="@+id/drawer_admin"
+            android:icon="@drawable/ic_baseline_build_24"
+            android:title="Modération"
+            android:visible="false" />
+
+    </group>
+
+</menu>

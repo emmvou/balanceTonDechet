@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Microwave",
+    "desc": "An old microwave, which still works",
+    "isPickedUp": false,
+    "isApproved": true,
+    "userEmail": "test@gmail.com",
+    "x": 43.6178307,
+    "y": 7.0764037
+  },
+  {
+    "name": "Microwave2",
+    "desc": "An old microwave, which still works",
+    "isPickedUp": false,
+    "isApproved": true,
+    "userEmail": "test@gmail.com",
+    "x": 43.616946,
+    "y": 7.074177
+  },
+  {
+    "name": "Mime",
+    "desc": "Mais barrez-vous cons de mimes\n-Serge Karamazov (aucun lien)",
+    "isPickedUp": false,
+    "isApproved": true,
+    "userEmail": "test@gmail.com",
+    "x": 43.55292868335789,
+    "y": 7.017595246266021
+  }
+]
